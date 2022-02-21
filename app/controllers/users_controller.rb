@@ -9,15 +9,23 @@ class UsersController < ApplicationController
       flash[:notice] = "idyへようこそ！"
       redirect_to root_url
     else
-      flash[:notice] = "ログインに失敗しました"
       render "new"
     end
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      flash[:notice] = "保存しました"
+      redirect_to @user
+    else
+      flash[:notice] = "保存に失敗しました"
+      render "edit"
+    end
   end
 
   def destroy
