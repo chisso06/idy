@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "idyへようこそ！"
-      redirect_to root_path
+      redirect_to root_url
     else
       flash[:notice] = "ログインに失敗しました"
       render "new"
