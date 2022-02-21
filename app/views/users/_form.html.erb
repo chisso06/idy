@@ -1,0 +1,23 @@
+<%= form_with(model: @user, local: true) do |f| %>
+
+  <% if @user.errors.any? %>
+    <p>error!</p>
+  <% end %>
+
+  <%= f.label :ニックネーム %>
+  <%= f.text_field :name %>
+
+  <%= f.label :ユーザ名 %>
+  <%= f.text_field :user_name %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+
+  <%= f.label :password確認 %>
+  <%= f.password_field :password_confirmation %>
+
+  <%= f.submit yield(:button_text) %>
+<% end %>
