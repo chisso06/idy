@@ -1,0 +1,10 @@
+<%= link_to("idy", root_path) %>
+
+<% if session.empty? %>
+  <%= link_to("新規登録", "#") %>
+  <%= link_to("ログイン", "#") %>
+<% else %>
+  <%= link_to("Home", "#") %>
+  <%= link_to("MyPage", "#") %>
+  <%= link_to("電球", "#") %>
+<% end %>
