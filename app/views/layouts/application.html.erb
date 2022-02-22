@@ -10,14 +10,14 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-
+  <body>    
+    <%= render "layouts/header" %>
     <% if flash[:notice] %>
       <%= flash[:notice] %>
     <% end %>
-    
-    <%= render "layouts/header" %>
+
     <%= yield %>
+    
     <%= render "layouts/footer" %>
   </body>
 </html>
