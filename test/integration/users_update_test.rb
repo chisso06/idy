@@ -26,7 +26,7 @@ class UsersUpdateTest < ActionDispatch::IntegrationTest
                                               password: "",
                                               password_confirmation: "" } }
     follow_redirect!
-    assert_template "users/show"
+    assert_template "users/edit"
     assert_not flash.empty?
   end
 end

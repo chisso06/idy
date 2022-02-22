@@ -11,6 +11,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password_confirmation: "" } }
     end
     assert_template "users/new"
+    assert session[:id].nil?
     assert flash.empty?
   end
 
@@ -24,7 +25,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password_confirmation: "password" } }
     end
     follow_redirect!
-    assert_template "/"
+    assert_template "users/show"
+    assert_not session[:id].nil?
     assert_not flash.empty?
   end
 end

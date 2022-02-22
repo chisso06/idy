@@ -6,10 +6,26 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      session[:id] = @user.id
       flash[:notice] = "idyへようこそ！"
-      redirect_to root_url
+      redirect_to @user
     else
       render "new"
+    end
+  end
+
+  def login_form
+  end
+
+  def login
+    user = User.find_by(email: params[:user][:email])
+    if user && user.authenticate(params[:user][:password])
+      session[:id] = user.id
+      flash[:notice] = "ログインに成功しました"
+      redirect_to user
+    else
+      flash[:notice] = "メールアドレスもしくはパスワードが間違っています"
+      render "login_form"
     end
   end
 
@@ -21,7 +37,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update(user_params)
       flash[:notice] = "保存しました"
-      redirect_to user_url(@user)
+      redirect_to edit_user_url(@user)
     else
       flash[:notice] = "保存に失敗しました"
       render "edit"
