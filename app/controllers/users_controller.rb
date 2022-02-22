@@ -29,6 +29,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def logout
+    session[:id] = nil
+    redirect_to root_url
+  end
+
   def edit
     @user = User.find(params[:id])
   end
@@ -45,6 +50,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    User.find_by(params[:id]).destroy
+    session[:id] = nil
+    redirect_to root_url
   end
 
   def show
