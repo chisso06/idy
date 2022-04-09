@@ -1,2 +1,8 @@
 <% provide(:title, "") %>
 <h1>ユーザページ</h1>
+
+<% @posts.each do |post| %>
+	<%= link_to(post.title, post_path(post)) %>
+	<%= post.created_at %>
+	<br>
+<% end %>

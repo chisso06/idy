@@ -56,6 +56,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @posts = Post.where(user_id: params[:id])
   end
 
   def index

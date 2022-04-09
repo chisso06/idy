@@ -1,10 +1,12 @@
 <%= link_to("idy", root_path) %>
-
-<% if session.empty? %>
-  <%= link_to("新規登録", "#") %>
-  <%= link_to("ログイン", "#") %>
+<% if session[:id].nil? %>
+  <%= link_to("新規登録", new_user_path) %>
+  <%= link_to("ログイン", login_path) %>
 <% else %>
   <%= link_to("Home", "#") %>
-  <%= link_to("MyPage", "#") %>
-  <%= link_to("電球", "#") %>
+  <%= link_to("MyPage", user_path(session[:id])) %>
+  <%= link_to("みんなのアイデア", posts_path) %>
+  <%= link_to("電球", new_post_path) %>
 <% end %>
+<hr>
+<hr>

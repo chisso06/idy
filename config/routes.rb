@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   post "/logout" => "users#logout"
 
   resources :users
+  resources :posts
 end
