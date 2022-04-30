@@ -1,11 +1,18 @@
 <% provide(:title, @post.title) %>
 <h1><%= @post.title %></h1>
 <div>
-	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user)) %></p>
+	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user_id)) %></p>
 	<p>作成日：<%= @post.created_at %></p>
 	<p>更新日：<%= @post.updated_at %></p>
 	<p>カテゴリー：<%= @post.category %></p>
 	<p>内容：<%= @post.content %></p>
+
+	<%= link_to("いいねしたユーザー", "/likes/index/#{params[:id]}") %>
+	<% if @like.nil? %>
+		<p><%= button_to(@likes.count, "/likes/new/#{params[:id]}", method: :post) %></p>
+	<% else %>
+		<p><%= button_to(@likes.count, "/likes/#{params[:id]}", method: :delete) %></p>
+	<% end %>
 
 	<% if @post.user_id == session[:id] %>
 		<%= link_to("編集", edit_post_path(@post)) %>

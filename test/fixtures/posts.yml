@@ -5,6 +5,7 @@
 # below each fixture, per the syntax in the comments below
 #
 test:
+  id: 1
   title: test
   category: test
   content: test

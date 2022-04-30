@@ -24,7 +24,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
                                               category: "edit",
                                               content: "edit" } }
     assert_equal "edit", @post.reload.title
-    assert_redirected_to posts_path
+    assert_redirected_to post_path(@post)
     assert_not flash.empty?
   end
 end

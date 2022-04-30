@@ -9,8 +9,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @user = User.find_by(id: session[:id])
-    @post.user_id = @user.id
+    @post.user_id = session[:id]
     if @post.save
       flash[:notice] = "アイデアを投稿しました！"
       redirect_to post_url(@post)
@@ -27,7 +26,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     if @post.update(post_params)
       flash[:notice] = "変更を保存しました"
-      redirect_to posts_path
+      redirect_to post_url(@post)
     else
       flash[:notice] = "保存に失敗しました"
       render "edit"
@@ -41,7 +40,9 @@ class PostsController < ApplicationController
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
+    @like = Like.find_by(user_id: session[:id], post_id: params[:id])
+    @likes = Like.where(post_id: params[:id])
   end
 
   def index
