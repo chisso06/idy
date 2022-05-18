@@ -5,39 +5,33 @@ class LikesTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:hanako)
     @post = posts(:test)
+    @post1 = posts(:test1)
+    @like = likes(:test)
   end
 
-  test "successful like at post_show page" do
+  test "successful create like" do
+    login(@user)
+    get post_path(@post1)
+    assert_template "posts/show"
+    assert_select "p", text: "いいねする"
+    assert_difference('Like.count', 1) do
+      post likes_path
+    end
+    assert_redirected_to post_path(@post1)
+    follow_redirect!
+    assert_response :success
+  end
+
+  test "successful cansel like" do
     login(@user)
     get post_path(@post)
-    assert_difference 'Like.count', 1 do
-      post "/likes/new/#{@post.id}"
+    assert_template "posts/show"
+    assert_select "p", text: "いいねを取り消す"
+    assert_difference('Like.count', -1) do
+      delete like_path(@like)
     end
-  end
-
-  test "successful destroy like at post_show page" do
-    login(@user)
-    post "/likes/new/#{@post.id}"
-    get post_path(@post)
-    assert_difference 'Like.count', -1 do
-      delete "/likes/#{@post.id}"
-    end
-  end
-
-  test "successful like at user_show page" do
-    login(@user)
-    get user_path(@user)
-    assert_difference 'Like.count', 1 do
-      post "/likes/new/#{@post.id}"
-    end
-  end
-
-  test "successful destroy like at user_show page" do
-    login(@user)
-    post "/likes/new/#{@post.id}"
-    get user_path(@user)
-    assert_difference 'Like.count', -1 do
-      delete "/likes/#{@post.id}"
-    end
+    assert_redirected_to post_path(@post)
+    follow_redirect!
+    assert_response :success
   end
 end

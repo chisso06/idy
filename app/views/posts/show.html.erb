@@ -6,16 +6,30 @@
 	<p>更新日：<%= @post.updated_at %></p>
 	<p>カテゴリー：<%= @post.category %></p>
 	<p>内容：<%= @post.content %></p>
-
-	<%= link_to("いいねしたユーザー", "/likes/index/#{params[:id]}") %>
-	<% if @like.nil? %>
-		<p><%= button_to(@likes.count, "/likes/new/#{params[:id]}", method: :post) %></p>
-	<% else %>
-		<p><%= button_to(@likes.count, "/likes/#{params[:id]}", method: :delete) %></p>
+	<% if @post.user_id == session[:user_id] %>
+	<%= link_to("編集", edit_post_path(@post)) %>
+	<%= button_to("削除", post_path(@post), method: :delete) %>
 	<% end %>
 
-	<% if @post.user_id == session[:id] %>
-		<%= link_to("編集", edit_post_path(@post)) %>
-		<%= button_to("削除", post_path(@post), method: :delete) %>
+	<hr>
+	<%= link_to("いいねしたユーザー", likes_path) %>
+	<% if @like.nil? %>
+		<p>いいねする</p><%= button_to(@likes.count, likes_path, method: :post) %>
+	<% else %>
+		<p>いいねを取り消す</p><%= button_to(@likes.count, like_path(@like), method: :delete) %>
+	<% end %>
+
+	<hr>
+	<%= form_with(model: @comment, local: true) do |f| %>
+		<%= f.label :content, "コメントを追加する" %>
+		<%= f.text_area :content %>
+		<%= f.submit %>
+	<% end %>
+	<% @comments.each do |comment| %>
+		<%= link_to(comment.user.name, user_path(comment.user_id)) %>
+		<p><%= comment.content %></p>
+		<% if comment.user_id == session[:user_id] %>
+			<%= button_to("削除", comment_path(comment), method: :delete) %>
+		<% end %>
 	<% end %>
 </div>
