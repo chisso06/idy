@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      session[:id] = @user.id
+      session[:user_id] = @user.id
       flash[:notice] = "idyへようこそ！"
       redirect_to @user
     else
@@ -20,17 +20,17 @@ class UsersController < ApplicationController
   def login
     user = User.find_by(email: params[:user][:email])
     if user && user.authenticate(params[:user][:password])
-      session[:id] = user.id
+      session[:user_id] = user.id
       flash[:notice] = "ログインに成功しました"
       redirect_to user
     else
-      flash[:notice] = "メールアドレスもしくはパスワードが間違っています"
+      flash[:dangerous] = "メールアドレスもしくはパスワードが間違っています"
       render "login_form"
     end
   end
 
   def logout
-    session[:id] = nil
+    session[:user_id] = nil
     redirect_to root_url
   end
 
@@ -44,18 +44,21 @@ class UsersController < ApplicationController
       flash[:notice] = "保存しました"
       redirect_to edit_user_url(@user)
     else
-      flash[:notice] = "保存に失敗しました"
+      flash[:dangerous] = "保存に失敗しました"
       render "edit"
     end
   end
 
   def destroy
     User.find_by(params[:id]).destroy
-    session[:id] = nil
+    session[:user_id] = nil
     redirect_to root_url
   end
 
   def show
+    @user = User.find(params[:id])
+    @posts = Post.where(user_id: params[:id])
+    @likes = Like.where(user_id: params[:id])
   end
 
   def index

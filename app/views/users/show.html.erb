@@ -1,2 +1,13 @@
 <% provide(:title, "") %>
-<h1>ユーザページ</h1>
+<h1><%= @user.name %></h1>
+
+<p>アイデア一覧</p>
+<%= render "layouts/posts" %>
+
+<p>いいね</p>
+<% @likes.each do |like| %>
+	<%= link_to(like.user.name, user_path(like.user)) %>
+	<%= link_to(like.post.title, post_path(like.post)) %>
+	<%= like.post.created_at %>
+	<br>
+<% end %>

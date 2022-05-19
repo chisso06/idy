@@ -1,0 +1,28 @@
+カテゴリー設定
+タグ実装
+flash[:dangerous]
+お問い合わせ
+パスワード再設定
+メール送る
+indexつける
+user.yml tarou/hanako=>user/user1
+routingにないページにアクセスした時にトップページにアクセス
+
+controllerテスト
+・before_actionが正しく機能しているか
+・各ページにアクセスできるか
+
+home テスト
+https://railsguides.jp/testing.html#システムテストを実装する
+
+全ページ assert_template 単体テスト
+post different綴り直す、assert_template, assert_response
+user before_action ログインなど
+
+user
+urlからuser_idをなくす
+urlのidはusernameに変える
+
+今回の変更
+login_formの書き換え
+session[:id] →session[:user_id]

@@ -12,7 +12,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     post login_path, params: { user: { email: "tarou@example.com",
                                        password: "password" } }
     assert_template "users/login_form"
-    assert session[:id].nil?
+    assert session[:user_id].nil?
     assert_not flash.empty?
   end
 
@@ -22,7 +22,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     post login_path, params: { user: { email: "hanako@example.com",
                                        password: "wordpass" } }
     assert_template "users/login_form"
-    assert session[:id].nil?
+    assert session[:user_id].nil?
     assert_not flash.empty?
   end
 
@@ -33,7 +33,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
                                        password: "password" } }
     follow_redirect!
     assert_template "users/show"
-    assert_not session[:id].nil?
+    assert_not session[:user_id].nil?
     assert_not flash.empty?
   end
 end

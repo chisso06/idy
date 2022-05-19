@@ -11,7 +11,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password_confirmation: "" } }
     end
     assert_template "users/new"
-    assert session[:id].nil?
+    assert session[:user_id].nil?
     assert flash.empty?
   end
 
@@ -26,7 +26,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
     follow_redirect!
     assert_template "users/show"
-    assert_not session[:id].nil?
+    assert_not session[:user_id].nil?
     assert_not flash.empty?
   end
 end
