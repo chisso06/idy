@@ -50,6 +50,19 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by(user_name: params[:id])
     @user.update(edit_params)
+    unless params[:user][:image].nil?
+      if @user.image.include?(@user.user_name)
+        File.delete("public/user_icons/#{@user.image}")
+      end
+      image = params[:user][:image]
+      if image.original_filename.include?(".png") or image.original_filename.include?(".PNG")
+        extension = ".png"
+      else
+        extension = ".jpg"
+      end
+      @user.image = @user.user_name + extension
+      File.binwrite("public/user_icons/#{@user.user_name + extension}", image.read)
+    end
     if @user.save
       flash[:notice] = "保存しました"
       redirect_to @user
