@@ -38,6 +38,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get destroy_form" do
+    login(@user)
+    get destroy_path
+    assert_template "users/destroy_form"
+    assert_response :success
+  end
+
   #before_action test
 
   test "before_action: login_user" do
@@ -140,6 +147,23 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
                                               biography: "edit" } }
     assert_not flash[:dangerous].nil?
     assert_template "users/edit"
+    assert_response :success
+  end
+
+  test "successful destroy" do
+    login(@user)
+    delete user_path(@user), params: { password: "password" }
+    assert_not flash[:notice].nil?
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_response :success
+  end
+
+  test "unsuccessful destroy with wrong password" do
+    login(@user)
+    delete user_path(@user), params: { password: "wrong" }
+    assert_not flash[:dangerous].nil?
+    assert_template "users/destroy_form"
     assert_response :success
   end
 end

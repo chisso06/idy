@@ -4,8 +4,9 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.string :title
       t.text :content
       t.string :category
-      t.belongs_to :user
+      t.belongs_to :user, dependent: :destroy
       t.timestamps
     end
+    add_foreign_key :posts, :users, on_delete: :cascade
   end
 end

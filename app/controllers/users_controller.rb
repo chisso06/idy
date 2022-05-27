@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :login_user, only: [:logout, :edit, :update, :show]
+  before_action :login_user, only: [:logout, :edit, :update, :show, :destroy_form, :destroy]
   before_action :valid_user, only: :show
-  before_action :correct_user, only: [:edit, :update]
+  before_action :correct_user, only: [:edit, :update, :destroy]
 
   def new
     @user = User.new
@@ -76,6 +76,27 @@ class UsersController < ApplicationController
     @user = User.find_by(user_name: params[:id])
     @posts = Post.where(user_id: @user.id)
     @likes = Like.where(user_id: @user.id)
+  end
+
+  def destroy_form
+    @reason = ""
+  end
+
+  def destroy
+    @user = User.find_by(user_name: params[:id])
+    if @user.authenticate(params[:password])
+      if @user.image.include?(@user.user_name)
+        File.delete("public/user_icons/#{@user.image}")
+      end
+      @user.destroy
+      session[:user_id] = nil
+      flash[:notice] = "退会が完了しました"
+      redirect_to root_url
+    else
+      @reason = params[:reason]
+      flash[:dangerous] = "パスワードが違います"
+      render "destroy_form"
+    end
   end
 
   private

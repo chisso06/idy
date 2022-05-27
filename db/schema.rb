@@ -57,4 +57,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
     t.index ["user_name"], name: "index_users_on_user_name"
   end
 
+  add_foreign_key "comments", "posts", on_delete: :cascade
+  add_foreign_key "comments", "users", on_delete: :cascade
+  add_foreign_key "likes", "posts", on_delete: :cascade
+  add_foreign_key "likes", "users", on_delete: :cascade
+  add_foreign_key "posts", "users", on_delete: :cascade
 end
