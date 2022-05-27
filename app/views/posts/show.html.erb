@@ -1,35 +1,34 @@
 <% provide(:title, @post.title) %>
 <h1><%= @post.title %></h1>
 <div>
-	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user_id)) %></p>
+	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user)) %></p>
 	<p>作成日：<%= @post.created_at %></p>
 	<p>更新日：<%= @post.updated_at %></p>
 	<p>カテゴリー：<%= @post.category %></p>
 	<p>内容：<%= @post.content %></p>
-	<% if @post.user_id == session[:user_id] %>
-	<%= link_to("編集", edit_post_path(@post)) %>
-	<%= button_to("削除", post_path(@post), method: :delete) %>
+	<% if @post.user_id == @current_user.id %>
+		<%= link_to("編集", edit_post_path(@post)) %>
+		<%= button_to("削除", post_path(@post), method: :delete) %>
 	<% end %>
 
 	<hr>
-	<%= link_to("いいねしたユーザー", likes_path) %>
+	<%= link_to("いいねしたユーザー", post_likes_path(@post)) %>
 	<% if @like.nil? %>
-		<p>いいねする</p><%= button_to(@likes.count, likes_path, method: :post) %>
+		<p>いいねする</p><%= button_to(@likes.count, post_likes_path(@post), method: :post) %>
 	<% else %>
-		<p>いいねを取り消す</p><%= button_to(@likes.count, like_path(@like), method: :delete) %>
+		<p>いいねを取り消す</p><%= button_to(@likes.count, post_like_path(@post, @like), method: :delete) %>
 	<% end %>
 
 	<hr>
-	<%= form_with(model: @comment, local: true) do |f| %>
-		<%= f.label :content, "コメントを追加する" %>
+	<%= form_with(url: post_comments_path(@post), local: true) do |f| %>
 		<%= f.text_area :content %>
-		<%= f.submit %>
+		<%= f.submit "コメントを追加" %>
 	<% end %>
 	<% @comments.each do |comment| %>
-		<%= link_to(comment.user.name, user_path(comment.user_id)) %>
+		<%= link_to(comment.user.name, user_path(comment.user)) %>
 		<p><%= comment.content %></p>
-		<% if comment.user_id == session[:user_id] %>
-			<%= button_to("削除", comment_path(comment), method: :delete) %>
+		<% if comment.user_id == @current_user.id %>
+			<%= button_to("コメントを削除", post_comment_path(@post, comment), method: :delete) %>
 		<% end %>
 	<% end %>
 </div>

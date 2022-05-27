@@ -9,6 +9,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
   test "unsuccessful edit" do
     login(@user)
     get edit_post_path(@post)
+    assert_template "posts/edit"
     patch post_path(@post), params: { post: { title: "",
                                               category: "",
                                               content: "" } }
@@ -20,6 +21,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
   test "successful edit" do
     login(@user)
     get edit_post_path(@post)
+    assert_template "posts/edit"
     patch post_path(@post), params: { post: { title: "edit",
                                               category: "edit",
                                               content: "edit" } }

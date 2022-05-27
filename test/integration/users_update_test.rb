@@ -5,28 +5,18 @@ class UsersUpdateTest < ActionDispatch::IntegrationTest
     @user = users(:hanako)
   end
 
-  test "unsuccessful edit" do
-    get edit_user_path(@user)
-    assert_template "users/edit"
-    patch user_path(@user), params: { user: { name: "",
-                                              user_name: "",
-                                              email: "",
-                                              password: "pass",
-                                              password_confirmation: "word" } }
-    assert_template "users/edit"
-    assert_not flash.empty?
-  end
-
   test "successful edit" do
+    login(@user)
+    get user_path(@user)
+    assert_select "h1", text: "hanako"
+    assert_select "a[href=?]", edit_user_path, text: "Setting", count: 1
     get edit_user_path(@user)
     assert_template "users/edit"
     patch user_path(@user), params: { user: { name: "tarou",
-                                              user_name: "tarou",
-                                              email: "tarou@example.com",
-                                              password: "",
-                                              password_confirmation: "" } }
+                                              biography: "hello" } }
     follow_redirect!
-    assert_template "users/edit"
-    assert_not flash.empty?
+    assert_template "users/show"
+    assert_select "h1", text: "tarou"
+    assert_select "p", text: "hello"
   end
 end

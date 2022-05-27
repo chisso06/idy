@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.user_id = session[:user_id]
+    @post.user_id = @current_user.id
     if @post.save
       flash[:notice] = "アイデアを投稿しました！"
       redirect_to post_url(@post)
@@ -19,11 +19,11 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
   end
 
   def update
-    @post = Post.find(params[:id])
+    @post = Post.find_by(id: params[:id])
     if @post.update(post_params)
       flash[:notice] = "変更を保存しました"
       redirect_to post_url(@post)
@@ -34,19 +34,17 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    Post.find_by(params[:id]).destroy
-    session[:post_id] = nil
+    Post.find_by(id: params[:id]).destroy
     flash[:notice] = "投稿を削除しました"
     redirect_to posts_url
   end
 
   def show
-    session[:post_id] = params[:id]
     @post = Post.find_by(id: params[:id])
-    @like = Like.find_by(user_id: session[:user_id], post_id: session[:post_id])
-    @likes = Like.where(post_id: session[:post_id])
+    @like = Like.find_by(user_id: @current_user.id, post_id: params[:id])
+    @likes = Like.where(post_id: params[:id])
     @comment = Comment.new
-    @comments = Comment.where(post_id: session[:post_id])
+    @comments = Comment.where(post_id: params[:id])
   end
 
   def index
@@ -60,15 +58,15 @@ class PostsController < ApplicationController
     end
 
     def login_user
-      if session[:user_id].nil?
+      if @current_user.nil?
         flash[:dangerous] = "ログインしてください"
         redirect_to login_url
       end
     end
 
     def correct_user
-      post = Post.find(params[:id])
-      if post.user_id != session[:user_id]
+      post = Post.find_by(id: params[:id])
+      if post.user_id != @current_user.id && @current_user.admin == "0"
         flash[:dangerous] = "権限がありません"
         redirect_to posts_url
       end

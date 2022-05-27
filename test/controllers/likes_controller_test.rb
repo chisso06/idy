@@ -10,23 +10,14 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     login(@user)
     get post_path(@post)
-    get likes_path
+    get post_likes_path(@post)
     assert_response :success
   end
 
   test "unsuccessful access when not logged in" do
-    post likes_path
+    post post_likes_path(@post)
     assert_not flash[:dangerous].nil?
     assert_redirected_to login_path
-    follow_redirect!
-    assert_response :success
-  end
-
-  test "unsuccessful access without post_id session" do
-    login(@user)
-    post likes_path
-    assert_not flash[:dangerous].nil?
-    assert_redirected_to posts_path
     follow_redirect!
     assert_response :success
   end

@@ -12,7 +12,7 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
   
   def login(user)
-    post login_path, params: { user: { email: user.email,
-                                       password: "password" } }
+    post login_path, params: { user_name: user.user_name,
+                               password: "password" }
   end
 end

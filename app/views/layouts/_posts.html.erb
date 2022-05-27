@@ -1,6 +1,6 @@
 <div>
   <% @posts.each do |post| %>
-    <%= link_to(post.user.name, user_path(post.user_id)) %>
+    <%= link_to(post.user.name + "@" + post.user.user_name, user_path(post.user)) %>
     <%= link_to(post.title, post_path(post)) %>
     <%= post.created_at %>
     <br>

@@ -3,20 +3,21 @@ require "test_helper"
 class CommentCreateTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = users(:tarou)
+    @user = users(:hanako)
     @post = posts(:test)
   end
 
   test "successful create comment" do
     login(@user)
     get post_path(@post)
-    assert_select "button", text: "削除", count: 0
-    assert_select "a[href=?]", user_path(@user), text: @user.name, count: 0
+    assert_template "posts/show"
+    assert_select "p", text: "create_test_comment", count: 0
+    assert_select "input", value: "コメントを追加"
     assert_difference('Comment.count', 1) do
-      post comments_path(comment: {content: "test"})
+      post post_comments_path(@post), params: {content: "create_test_comment"}
     end
     follow_redirect!
-    assert_select "button", text: "削除", count: 1
-    assert_select "a[href=?]", user_path(@user), text: @user.name, count: 1
+    assert_template "posts/show"
+    assert_select "p", text: "create_test_comment", count: 1
   end
 end

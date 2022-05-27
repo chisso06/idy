@@ -8,4 +8,4 @@ test:
   id: 1
   user_id: 1
   post_id: 1
-  content: "test"
+  content: "test_comment"

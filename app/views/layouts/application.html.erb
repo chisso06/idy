@@ -13,9 +13,8 @@
   <body>    
     <%= render "layouts/header" %>
     <br>
-    <% if flash[:notice] %>
-      <%= flash[:notice] %>
-    <% end %>
+    <p><%= flash[:dangerous] %></p>
+    <p><%= flash[:notice] %></p>
 
     <%= yield %>
     <br>

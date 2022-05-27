@@ -6,14 +6,20 @@
 #
 hanako:
   id: 1
+  hashed_id: "1"
   name: hanako
   user_name: hanako
   email: hanako@example.com
+  image: default.png
   password_digest: <%= BCrypt::Password.create("password") %>
+  admin: 0
 
 tarou:
   id: 2
+  hashed_id: "2"
   name: dummy
   user_name: dummy
   email: dummy@example.com
+  image: default.png
   password_digest: <%= BCrypt::Password.create("password") %>
+  admin: 0

@@ -6,34 +6,17 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     @user = users(:hanako)
   end
 
-  test "should not login with invalid email" do
+  test "successful login" do
     get login_path
     assert_template "users/login_form"
-    post login_path, params: { user: { email: "tarou@example.com",
-                                       password: "password" } }
-    assert_template "users/login_form"
-    assert session[:user_id].nil?
-    assert_not flash.empty?
-  end
-
-  test "should not login with invalid password" do
-    get login_path
-    assert_template "users/login_form"
-    post login_path, params: { user: { email: "hanako@example.com",
-                                       password: "wordpass" } }
-    assert_template "users/login_form"
-    assert session[:user_id].nil?
-    assert_not flash.empty?
-  end
-
-  test "login with valid email/password" do
-    get login_path
-    assert_template "users/login_form"
-    post login_path, params: { user: { email: "hanako@example.com",
-                                       password: "password" } }
+    post login_path, params:  { user_name: "hanako",
+                                password: "password" }
     follow_redirect!
+    assert_template "posts/index"
+    assert_select "a[href=?]", user_path(@user)
+    get user_path(@user)
     assert_template "users/show"
-    assert_not session[:user_id].nil?
-    assert_not flash.empty?
+    assert_select "h1", text: "hanako"
+    assert_select "p", "@hanako"
   end
 end

@@ -4,20 +4,25 @@
     <p>error!</p>
   <% end %>
 
-  <%= f.label :ニックネーム %>
+  <%= f.label :Name %>
   <%= f.text_field :name %>
-
-  <%= f.label :ユーザ名 %>
-  <%= f.text_field :user_name %>
-
-  <%= f.label :email %>
-  <%= f.email_field :email %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.label :password確認 %>
-  <%= f.password_field :password_confirmation %>
-
+  <br>
+  <% if @user.new_record? %>
+    <%= f.label :Username %>
+    @<%= f.text_field :user_name %>
+    <br>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+    <br>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+    <br>
+    <%= f.label :password確認 %>
+    <%= f.password_field :password_confirmation %>
+    <br>
+  <% else %>
+    <%= f.label :ひとこと %>
+    <%= f.text_field :biography %>
+  <% end %>
   <%= f.submit yield(:button_text) %>
 <% end %>

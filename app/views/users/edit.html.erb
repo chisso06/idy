@@ -1,5 +1,13 @@
-<% provide(:title, "設定") %>
-<% provide(:button_text, "Update") %>
+<% provide(:title, "Setting") %>
+<% provide(:button_text, "Save") %>
 <h1>Setting</h1>
 
 <%= render "users/form" %>
+
+<%= link_to("ユーザーネームを変更する", "#") %>
+<br>
+<%= link_to("メールアドレスを変更する", "#") %>
+<br>
+<%= link_to("パスワードを変更する", "#") %>
+<br>
+<%= link_to("Log Out", logout_path) %>
