@@ -1,0 +1,12 @@
+<% provide(:title, "退会ページ") %>
+<h1>退会ページ</h1>
+<%= form_with(url: user_path(@current_user), local: true) do |f| %>
+	<%= f.label :退会理由を教えてください %>
+	<%= f.text_field :reason %>
+	<p><%= @reason %></p>
+	<%= f.label :パスワード %>
+	<%= f.password_field :password %>
+	<br>
+	<input type="hidden", name="_method", value="DELETE">
+	<%= f.submit "退会する" %>
+<% end %>
