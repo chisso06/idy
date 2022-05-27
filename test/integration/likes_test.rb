@@ -15,11 +15,11 @@ class LikesTest < ActionDispatch::IntegrationTest
     assert_template "posts/show"
     assert_select "p", text: "いいねする"
     assert_difference('Like.count', 1) do
-      post likes_path
+      post post_likes_path(@post1)
     end
-    assert_redirected_to post_path(@post1)
     follow_redirect!
-    assert_response :success
+    assert_template "posts/show"
+    assert_select "p", text: "いいねを取り消す"
   end
 
   test "successful cansel like" do
@@ -28,10 +28,10 @@ class LikesTest < ActionDispatch::IntegrationTest
     assert_template "posts/show"
     assert_select "p", text: "いいねを取り消す"
     assert_difference('Like.count', -1) do
-      delete like_path(@like)
+      delete post_like_path(@post, @like)
     end
-    assert_redirected_to post_path(@post)
     follow_redirect!
-    assert_response :success
+    assert_template "posts/show"
+    assert_select "p", text: "いいねする"
   end
 end

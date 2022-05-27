@@ -10,6 +10,7 @@ class PostsCreateTest < ActionDispatch::IntegrationTest
   test "invalid post" do
     login(@user)
     get new_post_path
+    assert_template "posts/new"
     assert_no_difference 'Post.count' do
       post posts_path, params: { post: { title: "",
                                          category: "",
@@ -22,6 +23,7 @@ class PostsCreateTest < ActionDispatch::IntegrationTest
   test "valid post" do
     login(@user)
     get new_post_path
+    assert_template "posts/new"
     assert_difference 'Post.count', 1 do
       post posts_path, params: { post: { title: "test",
                                          category: "test",

@@ -5,8 +5,11 @@ Rails.application.routes.draw do
   post "/login" => "users#login"
   post "/logout" => "users#logout"
 
+  get "/destroy" => "users#destroy_form"
+
   resources :users
-  resources :posts
-  resources :likes
-  resources :comments
+  resources :posts do
+    resources :likes
+    resources :comments
+  end
 end

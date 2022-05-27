@@ -1,28 +1,53 @@
-カテゴリー設定
-タグ実装
-flash[:dangerous]
+[全体]
+find => find_by
+ひらめき投稿とお題投稿?
+投稿の仕方(Markdown)
+ポップアップ(?)
+
+[テスト]
+・単体テスト
+	全ページ assert_template
+	post different綴り直す、assert_template, assert_response
+・controllerテスト
+	before_actionが正しく機能しているか
+	各ページにアクセスできるか
+	各アクションのフラッシュメッセージやリダイレクト先など
+	assert_redirected_to => follow_redirect! => assert_response :success
+・integrationテスト
+	assert_difference
+	assert_select
+	リダイレクト先などを軽くチェック
+
+[home]
+利用規約
+ヘルプ（退会の方法/リンクもここに）
 お問い合わせ
-パスワード再設定
-メール送る
-indexつける
-user.yml tarou/hanako=>user/user1
 routingにないページにアクセスした時にトップページにアクセス
 
-controllerテスト
-・before_actionが正しく機能しているか
-・各ページにアクセスできるか
+[post機能]
+タグ
+カテゴリー？
+indexつける
+タグDB?
+概要(100字以内)
 
-home テスト
-https://railsguides.jp/testing.html#システムテストを実装する
+[user機能]
+画像保存
+アカウント削除ページ
+メールアドレス認証
+パスワードの再設定
+設定(user_name, email, password)
+user_nameが変わったらimage_nameも変わることに注意
+ヘッダー画像
+(フォロー機能)
+(ユーザー検索)
+(画像調整機能)
 
-全ページ assert_template 単体テスト
-post different綴り直す、assert_template, assert_response
-user before_action ログインなど
-
-user
-urlからuser_idをなくす
-urlのidはusernameに変える
-
-今回の変更
-login_formの書き換え
-session[:id] →session[:user_id]
+[今回の変更]
+before_action
+routing: user_id => user_name
+name,mail index
+session[:user_id]の値を id => hashed_id
+routingをネストし、session[post_id]をなくす
+admin
+ここまでのテストの見直し・作成

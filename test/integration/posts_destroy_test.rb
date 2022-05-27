@@ -8,6 +8,8 @@ class PostsDestroyTest < ActionDispatch::IntegrationTest
 
   test "destroy post" do
     login(@user)
+    get posts_path
+    assert_template "posts/index"
     assert_difference 'Post.count', -1 do
       delete post_path(@post)
     end

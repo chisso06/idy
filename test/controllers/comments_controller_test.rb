@@ -12,18 +12,9 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
 
   test "unsuccessful comment when not logged in" do
     get post_path(@post)
-    post comments_path
+    post post_comments_path(@post)
     assert_not flash[:dangerous].nil?
     assert_redirected_to login_path
-    follow_redirect!
-    assert_response :success
-  end
-
-  test "unsuccessful comment without post_id session" do
-    login(@user)
-    post comments_path
-    assert_not flash[:dangerous].nil?
-    assert_redirected_to posts_path
     follow_redirect!
     assert_response :success
   end
@@ -31,7 +22,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
   test "successful comment" do
     login(@user)
     get post_path(@post)
-    post comments_path(comment: {content: "test"})
+    post post_comments_path(@post), params: {content: "test"}
     assert_not flash[:notice].nil?
     assert_redirected_to post_path(@post)
     follow_redirect!
@@ -41,7 +32,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
   test "unsuccessful destroy comment of other user" do
     login(@user1)
     get post_path(@post)
-    delete comment_path(@comment)
+    delete post_comment_path(@post, @comment)
     assert_not flash[:dangerous].nil?
     assert_redirected_to post_path(@post)
     follow_redirect!
@@ -51,7 +42,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
   test "successful destroy comment" do
     login(@user)
     get post_path(@post)
-    delete comment_path(@comment)
+    delete post_comment_path(@post, @comment)
     assert_not flash[:notice].nil?
     assert_redirected_to post_path(@post)
     follow_redirect!
