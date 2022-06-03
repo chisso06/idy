@@ -11,6 +11,9 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :admin, default: 0
       t.timestamps
     end
+    add_column :users, :activation_digest, :string
+    add_column :users, :activated, :boolean, default: false
+    add_column :users, :activated_at, :datetime
     add_index :users, :hashed_id
     add_index :users, :name
     add_index :users, :user_name

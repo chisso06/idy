@@ -12,6 +12,8 @@ hanako:
   email: hanako@example.com
   image: admin.png
   password_digest: <%= BCrypt::Password.create("password") %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
   admin: 0
 
 tarou:
@@ -22,4 +24,6 @@ tarou:
   email: dummy@example.com
   image: admin.png
   password_digest: <%= BCrypt::Password.create("password") %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
   admin: 0

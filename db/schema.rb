@@ -51,6 +51,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
     t.string "admin", default: "0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "activation_digest"
+    t.boolean "activated", default: false
+    t.datetime "activated_at"
     t.index ["email"], name: "index_users_on_email"
     t.index ["hashed_id"], name: "index_users_on_hashed_id"
     t.index ["name"], name: "index_users_on_name"

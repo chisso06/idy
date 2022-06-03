@@ -3,8 +3,11 @@
 <h1><%= @user.name %></h1>
 <p>@<%= @user.user_name %></p>
 <p><%= @user.biography %></p>
-<% if @current_user.id == @user.id %>
-	<%= link_to("Setting", edit_user_path(@user)) %>
+
+<% if @current_user %>
+	<% if @current_user.id == @user.id %>
+		<%= link_to("Setting", edit_user_path(@user)) %>
+	<% end %>
 <% end %>
 
 <p>アイデア一覧</p>
