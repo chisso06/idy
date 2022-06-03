@@ -8,12 +8,12 @@
   <%= link_to("みんなのアイデア", posts_path) %>
   <%= link_to("電球", new_post_path) %>
 <% end %>
-user_id:
 <% if @current_user.nil? %>
-  <%= "なし" %>
+  <% user = "なし" %>
 <% else %>
-  <%= @current_user.user_name %>
+  <% user = @current_user.user_name %>
 <% end %>
+user:<%= user %>
 post_id:<%= session[:post_id] %>
 <hr>
 <hr>

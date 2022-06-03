@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
+  attr_accessor :activation_token
 
   validates :hashed_id, presence: true,
                         uniqueness: true
@@ -33,5 +34,25 @@ class User < ApplicationRecord
 
   def to_param
     user_name
+  end
+
+  def create_activation_token_and_digest(test_token)
+    if test_token.nil?
+      token = SecureRandom.urlsafe_base64
+    else
+      token = test_token
+    end
+    self.activation_token = token
+    self.activation_digest = BCrypt::Password.create(token)
+  end
+
+  def send_activation_email
+    UserMailer::account_activation(self).deliver_now
+  end
+
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
   end
 end

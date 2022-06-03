@@ -12,10 +12,12 @@ User.create!(
 	email: "idy@example.com",
 	image: "admin.png",
 	password_digest: BCrypt::Password.create("password"),
+	activated: true,
+	activated_at: Time.zone.now,
 	admin: 1
 )
 
-for i in 1..5 do
+for i in 1..10 do
 	User.create!(
 		hashed_id: "test" + i.to_s,
 		name: "test" + i.to_s,
@@ -23,6 +25,8 @@ for i in 1..5 do
 		email: "test" + i.to_s + "@example.com",
 		image: "admin.png",
 		password_digest: BCrypt::Password.create("password"),
+		activated: true,
+		activated_at: Time.zone.now,
 		admin: 0
 	)
 end

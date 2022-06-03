@@ -1,0 +1,10 @@
+<% provide(:title, "メールアドレス変更") %>
+<h1>メールアドレス変更</h1>
+
+<%= form_with(url: "/edit_email/#{@user.user_name}") do |f| %>
+	<%= f.label :新しいメールアドレス %>
+	<%= f.text_field :email %>
+	<%= f.label :パスワード %>
+	<%= f.password_field :password %>
+	<%= f.submit :次へ %>
+<% end %>

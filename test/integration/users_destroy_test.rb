@@ -11,7 +11,7 @@ class UsersDestroyTest < ActionDispatch::IntegrationTest
     get posts_path
     assert_template "posts/index"
     assert_select "a", text: "hanako"
-		get destroy_path
+		get "/destroy/#{@user[:user_name]}"
 		assert_template "users/destroy_form"
 		assert_select "input", value: "退会する"
 		assert_difference 'User.count', -1 do

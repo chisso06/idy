@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
-  before_action :login_user, only: [:logout, :edit, :update, :show, :destroy_form, :destroy]
-  before_action :valid_user, only: :show
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :login_user, only: [:logout, :edit, :update, :destroy_form, :destroy]
+  before_action :not_login_user, only: [:new, :create, :login_form, :login]
+  before_action :activated_user, only: [:edit, :update]
+  before_action :valid_user, only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show]
+  before_action :correct_user, only: [:edit, :update, :destroy_form, :destroy]
 
   def new
     @user = User.new
@@ -10,12 +12,18 @@ class UsersController < ApplicationController
   def create
     require 'securerandom'
     @user = User.new(new_params)
-    @user.hashed_id = to_hash_id
+    @user.email = params[:user][:email].downcase
+    @user.hashed_id = create_hash_id
     @user.image = "admin.png"
+    # @user.create_activation_token_and_digest("")
+    @user.create_activation_token_and_digest("create") #test
     if @user.save
-      session[:user_id] = @user.hashed_id
-      flash[:notice] = "idyへようこそ！"
-      redirect_to posts_path
+      @user.send_activation_email
+		  flash[:notice] = "認証メールを送信しました"
+      redirect_to email_authentication_url(email: @user.email)
+    elsif User.find_by(email: @user.email)
+      flash[:dangerous] = "このメールアドレスは登録済みです。ログインしてください。"
+      redirect_to login_path
     else
       flash[:dangerous] = "内容に不備があります"
       render "new"
@@ -28,9 +36,19 @@ class UsersController < ApplicationController
   def login
     user = User.find_by(user_name: params[:user_name])
     if user && user.authenticate(params[:password])
-      session[:user_id] = user.hashed_id
-      flash[:notice] = "ログインに成功しました"
-      redirect_to posts_path
+      if user.activated?
+        session[:user_id] = user.hashed_id
+        flash[:notice] = "idyにようこそ！"
+        redirect_to posts_url  
+      else
+        session[:user_id] = nil
+        # user.create_activation_token_and_digest("")
+        user.create_activation_token_and_digest("login") #test
+        user.save
+        user.send_activation_email
+        flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
+        redirect_to email_authentication_url(email: user.email)
+      end
     else
       flash[:dangerous] = "ユーザー名もしくはパスワードが間違っています"
       render "login_form"
@@ -50,7 +68,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by(user_name: params[:id])
     @user.update(edit_params)
-    unless params[:user][:image].nil?
+    if params[:user][:image]
       if @user.image.include?(@user.user_name)
         File.delete("public/user_icons/#{@user.image}")
       end
@@ -72,13 +90,35 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
+  def edit_email_form
     @user = User.find_by(user_name: params[:id])
-    @posts = Post.where(user_id: @user.id)
-    @likes = Like.where(user_id: @user.id)
+  end
+
+  def edit_email
+    @user = User.find_by(user_name: params[:id])
+    if @user.email == params[:email].downcase
+      flash[:dangerous] = "このメールアドレスはすでに登録されています"
+      render "edit_email_form"
+    else
+      @user.email = params[:email]
+      if @user.authenticate(params[:password]) && @user.save
+        session[:user_id] = nil
+        @user.activated = false
+        # @user.create_activation_token_and_digest("")
+        @user.create_activation_token_and_digest("edit_email") #test
+        @user.save
+        @user.send_activation_email
+        flash[:notice] = "認証メールを送信しました"
+        redirect_to email_authentication_url(email: @user.email)
+      else
+        flash[:dangerous] = "内容に不備があります"
+        render "edit_email_form"
+      end
+    end
   end
 
   def destroy_form
+    @user = User.find_by(user_name: params[:id])
     @reason = ""
   end
 
@@ -99,17 +139,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find_by(user_name: params[:id])
+    @posts = Post.where(user_id: @user.id)
+    @likes = Like.where(user_id: @user.id)
+  end
+
   private
 
+    # params
     def new_params
-      params.require(:user).permit(:name, :user_name, :email, :password)
+      params.require(:user).permit(:name, :user_name, :password)
     end
 
     def edit_params
       params.require(:user).permit(:name, :biography)
     end
 
-    def to_hash_id
+    # method
+    def create_hash_id
       hashed_id = SecureRandom.alphanumeric(5)
       while (User.find_by(hashed_id: @user.hashed_id))
         hashed_id = SecureRandom.alphanumeric(5)
@@ -117,6 +165,7 @@ class UsersController < ApplicationController
       return hashed_id
     end
 
+    # before_actions
     def login_user
       if @current_user.nil?
         flash[:dangerous] = "ログインしてください"
@@ -124,8 +173,26 @@ class UsersController < ApplicationController
       end
     end
 
+    def not_login_user
+      if @current_user
+        redirect_to posts_path
+      end
+    end
+
+    def activated_user #testまだ
+      unless @current_user.activated?
+        session[:user_id] = nil
+        # user.create_activation_token_and_digest("")
+        user.create_activation_token_and_digest("activated_user") #test
+        user.send_activation_email
+        flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
+        redirect_to email_authentication_url(email: user.email)
+      end
+    end
+
     def valid_user
-      if User.find_by(user_name: params[:id]).nil?
+      user =  User.find_by(user_name: params[:id])
+      if user.nil?
         flash[:dangerous] = "このユーザーは存在しません"
         redirect_to posts_path
       end
