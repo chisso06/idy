@@ -23,15 +23,15 @@ class EditEmailTest < ActionDispatch::IntegrationTest
     assert_template "account_activations/email_authentication"
     assert_select "p", text: email
     # token test---
-    @user = assigns(:user)
-    get edit_account_activation_path("edit_email", email: @user[:email])
-    follow_redirect!
-    assert_template "posts/index"
-    assert_select "a[href=?]", user_path(@user)
-    get user_path(@user)
-    assert_template "users/show"
-    assert_select "h1", text: @user[:name]
-    assert_select "p", "@#{@user[:user_name]}"
+    # @user = assigns(:user)
+    # get edit_account_activation_path("edit_email", email: @user[:email])
+    # follow_redirect!
+    # assert_template "posts/index"
+    # assert_select "a[href=?]", user_path(@user)
+    # get user_path(@user)
+    # assert_template "users/show"
+    # assert_select "h1", text: @user[:name]
+    # assert_select "p", "@#{@user[:user_name]}"
     # ---
   end
 
@@ -50,15 +50,15 @@ class EditEmailTest < ActionDispatch::IntegrationTest
     assert_template "account_activations/email_authentication"
     assert_select "p", text: email
     # token_test---
-    @user = assigns(:user)
-    get edit_account_activation_path("edit_email", email: @user[:email])
-    follow_redirect!
-    assert_template "posts/index"
-    assert_select "a[href=?]", user_path(@user)
-    get user_path(@user)
-    assert_template "users/show"
-    assert_select "h1", text: @user[:name]
-    assert_select "p", "@#{@user[:user_name]}"
+    # @user = assigns(:user)
+    # get edit_account_activation_path("edit_email", email: @user[:email])
+    # follow_redirect!
+    # assert_template "posts/index"
+    # assert_select "a[href=?]", user_path(@user)
+    # get user_path(@user)
+    # assert_template "users/show"
+    # assert_select "h1", text: @user[:name]
+    # assert_select "p", "@#{@user[:user_name]}"
     # ---
   end
 end

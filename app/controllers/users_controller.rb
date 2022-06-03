@@ -15,8 +15,8 @@ class UsersController < ApplicationController
     @user.email = params[:user][:email].downcase
     @user.hashed_id = create_hash_id
     @user.image = "admin.png"
-    # @user.create_activation_token_and_digest("")
-    @user.create_activation_token_and_digest("create") #test
+    @user.create_activation_token_and_digest("")
+    # @user.create_activation_token_and_digest("create") #test
     if @user.save
       @user.send_activation_email
 		  flash[:notice] = "認証メールを送信しました"
@@ -42,8 +42,8 @@ class UsersController < ApplicationController
         redirect_to posts_url  
       else
         session[:user_id] = nil
-        # user.create_activation_token_and_digest("")
-        user.create_activation_token_and_digest("login") #test
+        user.create_activation_token_and_digest("")
+        # user.create_activation_token_and_digest("login") #test
         user.save
         user.send_activation_email
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
@@ -104,8 +104,8 @@ class UsersController < ApplicationController
       if @user.authenticate(params[:password]) && @user.save
         session[:user_id] = nil
         @user.activated = false
-        # @user.create_activation_token_and_digest("")
-        @user.create_activation_token_and_digest("edit_email") #test
+        @user.create_activation_token_and_digest("")
+        # @user.create_activation_token_and_digest("edit_email") #test
         @user.save
         @user.send_activation_email
         flash[:notice] = "認証メールを送信しました"
@@ -182,8 +182,8 @@ class UsersController < ApplicationController
     def activated_user #testまだ
       unless @current_user.activated?
         session[:user_id] = nil
-        # user.create_activation_token_and_digest("")
-        user.create_activation_token_and_digest("activated_user") #test
+        user.create_activation_token_and_digest("")
+        # user.create_activation_token_and_digest("activated_user") #test
         user.send_activation_email
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
         redirect_to email_authentication_url(email: user.email)
