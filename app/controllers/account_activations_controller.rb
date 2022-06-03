@@ -9,8 +9,8 @@ class AccountActivationsController < ApplicationController
 
 	def send_email_again
 		user = User.find_by(email: params[:email])
-		# user.create_activation_token_and_digest("")
-		user.create_activation_token_and_digest("send_email_again") #test
+		user.create_activation_token_and_digest("")
+		# user.create_activation_token_and_digest("send_email_again") #test
 		user.save
 		user.send_activation_email
 		flash[:notice] = "認証メールを送信しました"
@@ -21,7 +21,8 @@ class AccountActivationsController < ApplicationController
 		user = User.find_by(email: params[:email])
 		if user.authenticated?(:activation, params[:id])
 			user.update(activated: true,
-									activated_at: Time.zone.now)
+									activated_at: Time.zone.now,
+									activation_digest: nil)
 			session[:user_id] = user.hashed_id
 			flash[:notice] = "idyにようこそ！"
 			redirect_to posts_url
