@@ -66,7 +66,7 @@ class PostsController < ApplicationController
 
     def correct_user
       post = Post.find_by(id: params[:id])
-      if post.user_id != @current_user.id && @current_user.admin == "0"
+      if post.user_id != @current_user.id && !@current_user.admin?
         flash[:dangerous] = "権限がありません"
         redirect_to posts_url
       end

@@ -2,9 +2,6 @@ class User < ApplicationRecord
   has_secure_password
   attr_accessor :activation_token
 
-  validates :hashed_id, presence: true,
-                        uniqueness: true
-
   VALID_NAME_REGEX = /\A(?!\s).*\z/
   validates :name,      presence: true,
                         length: { maximum: 30 },
@@ -30,8 +27,6 @@ class User < ApplicationRecord
 
   validates :biography, length: { maximum: 150 }
 
-  validates :admin,     presence: true
-
   def to_param
     user_name
   end
@@ -44,6 +39,13 @@ class User < ApplicationRecord
     end
     self.activation_token = token
     self.activation_digest = BCrypt::Password.create(token)
+  end
+
+  def reset_session_token
+    token = SecureRandom.alphanumeric(8)
+    self.session_token = token
+    self.save
+    return token
   end
 
   def send_activation_email

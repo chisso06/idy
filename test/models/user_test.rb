@@ -4,38 +4,19 @@ class UserTest < ActiveSupport::TestCase
 
   def setup
     @user = User.new(
-      hashed_id: "sample",
+      session_token: "sample",
       name: "a" * 30,
       user_name: "sample",
       email: "sample@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png",
-      biography: "a" * 150
+      biography: "a" * 150,
     )
   end
 
   test "should be valid" do
     assert @user.valid?
-  end
-
-  #hashed_id test
-  test "hashed_id should be presence" do
-    @user.hashed_id = ""
-    assert_not @user.valid?
-  end
-
-  test "hashed_id should be unique" do
-    user = User.create(
-      hashed_id: "sample",
-      name: "sample2",
-      user_name: "sample2",
-      email: "sample2@example.com",
-      password: "password",
-      password_confirmation: "password",
-      image: "admin.png"
-    )
-    assert_not @user.valid?
   end
 
   # name test
@@ -99,7 +80,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "user_name should be unique" do
     user = User.create(
-      hashed_id: "sample2",
+      session_token: "sample2",
       name: "sample2",
       user_name: "sample",
       email: "sample2@example.com",
@@ -141,7 +122,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "email should be unique" do
     user = User.new(
-      hashed_id: "sample2",
+      session_token: "sample2",
       name: "sample2",
       user_name: "sample2",
       email: "sample@example.com",
@@ -173,12 +154,6 @@ class UserTest < ActiveSupport::TestCase
   #biography test
   test "biography should not be too long" do
     @user.biography = "a" * 151
-    assert_not @user.valid?
-  end
-
-  #admin test
-  test "admin should be presence" do
-    @user.admin = nil
     assert_not @user.valid?
   end
 end

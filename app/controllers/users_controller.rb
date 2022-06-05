@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     require 'securerandom'
     @user = User.new(new_params)
     @user.email = params[:user][:email].downcase
-    @user.hashed_id = create_hash_id
     @user.image = "admin.png"
     @user.create_activation_token_and_digest("")
     # @user.create_activation_token_and_digest("create") #test
@@ -37,11 +36,10 @@ class UsersController < ApplicationController
     user = User.find_by(user_name: params[:user_name])
     if user && user.authenticate(params[:password])
       if user.activated?
-        session[:user_id] = user.hashed_id
+        session[:user_id] = user.reset_session_token
         flash[:notice] = "idyにようこそ！"
         redirect_to posts_url  
       else
-        session[:user_id] = nil
         user.create_activation_token_and_digest("")
         # user.create_activation_token_and_digest("login") #test
         user.save
@@ -56,6 +54,7 @@ class UsersController < ApplicationController
   end
 
   def logout
+    @current_user.reset_session_token
     session[:user_id] = nil
     flash[:notice] = "ログアウトしました"
     redirect_to root_url
@@ -102,6 +101,7 @@ class UsersController < ApplicationController
     else
       @user.email = params[:email]
       if @user.authenticate(params[:password]) && @user.save
+        @user.reset_session_token
         session[:user_id] = nil
         @user.activated = false
         @user.create_activation_token_and_digest("")
@@ -156,15 +156,6 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :biography)
     end
 
-    # method
-    def create_hash_id
-      hashed_id = SecureRandom.alphanumeric(5)
-      while (User.find_by(hashed_id: @user.hashed_id))
-        hashed_id = SecureRandom.alphanumeric(5)
-      end
-      return hashed_id
-    end
-
     # before_actions
     def login_user
       if @current_user.nil?
@@ -181,6 +172,7 @@ class UsersController < ApplicationController
 
     def activated_user #testまだ
       unless @current_user.activated?
+        @current_user.reset_session_token
         session[:user_id] = nil
         user.create_activation_token_and_digest("")
         # user.create_activation_token_and_digest("activated_user") #test
@@ -200,7 +192,7 @@ class UsersController < ApplicationController
 
     def correct_user
       user = User.find_by(user_name: params[:id])
-      if user.id != @current_user.id && @current_user.admin == "0"
+      if user.id != @current_user.id && !@current_user.admin?
         flash[:dangerous] = "権限がありません"
         redirect_to posts_path
       end

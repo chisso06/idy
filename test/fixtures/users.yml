@@ -6,7 +6,7 @@
 #
 hanako:
   id: 1
-  hashed_id: "1"
+  session_token: "1"
   name: hanako
   user_name: hanako
   email: hanako@example.com
@@ -14,11 +14,11 @@ hanako:
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
-  admin: 0
+  admin: false
 
 tarou:
   id: 2
-  hashed_id: "2"
+  session_token: "2"
   name: dummy
   user_name: dummy
   email: dummy@example.com
@@ -26,4 +26,4 @@ tarou:
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
-  admin: 0
+  admin: false

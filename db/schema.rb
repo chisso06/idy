@@ -41,22 +41,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "hashed_id"
+    t.string "session_token"
     t.string "name"
     t.string "user_name"
     t.string "email"
     t.string "password_digest"
     t.string "image"
     t.string "biography"
-    t.string "admin", default: "0"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "activation_digest"
     t.boolean "activated", default: false
     t.datetime "activated_at"
+    t.boolean "admin", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email"
-    t.index ["hashed_id"], name: "index_users_on_hashed_id"
     t.index ["name"], name: "index_users_on_name"
+    t.index ["session_token"], name: "index_users_on_session_token"
     t.index ["user_name"], name: "index_users_on_user_name"
   end
 

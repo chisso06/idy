@@ -23,7 +23,7 @@ class AccountActivationsController < ApplicationController
 			user.update(activated: true,
 									activated_at: Time.zone.now,
 									activation_digest: nil)
-			session[:user_id] = user.hashed_id
+			session[:user_id] = user.reset_session_token
 			flash[:notice] = "idyにようこそ！"
 			redirect_to posts_url
 		else

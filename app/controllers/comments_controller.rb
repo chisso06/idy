@@ -66,7 +66,7 @@ class CommentsController < ApplicationController
 
 		def correct_user
 			comment = Comment.find_by(id: params[:id])
-			if comment.user_id != @current_user.id && @current_user.admin == "0"
+			if comment.user_id != @current_user.id && !@current_user.admin?
 				flash[:dangerous] = "権限がありません"
 				redirect_to post_url(params[:post_id])
 			end

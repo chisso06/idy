@@ -37,7 +37,7 @@ class LikesController < ApplicationController
 		end
 
 		def valid_post
-			if Post.find_by(id: params[:post_id]).nil? && @current_user.admin == "0"
+			if Post.find_by(id: params[:post_id]).nil? && !@current_user.admin?
 				flash[:dangerous] = "投稿が存在しません"
 				redirect_to posts_url
 			end
