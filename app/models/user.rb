@@ -30,8 +30,6 @@ class User < ApplicationRecord
 
   validates :biography, length: { maximum: 150 }
 
-  validates :admin,     presence: true
-
   def to_param
     user_name
   end

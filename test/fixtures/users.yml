@@ -14,7 +14,7 @@ hanako:
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
-  admin: 0
+  admin: false
 
 tarou:
   id: 2
@@ -26,4 +26,4 @@ tarou:
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
-  admin: 0
+  admin: false

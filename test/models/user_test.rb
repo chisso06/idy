@@ -11,7 +11,7 @@ class UserTest < ActiveSupport::TestCase
       password: "password",
       password_confirmation: "password",
       image: "admin.png",
-      biography: "a" * 150
+      biography: "a" * 150,
     )
   end
 
@@ -173,12 +173,6 @@ class UserTest < ActiveSupport::TestCase
   #biography test
   test "biography should not be too long" do
     @user.biography = "a" * 151
-    assert_not @user.valid?
-  end
-
-  #admin test
-  test "admin should be presence" do
-    @user.admin = nil
     assert_not @user.valid?
   end
 end
