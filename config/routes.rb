@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'password_resets/new'
+  get 'password_resets/edit'
   root 'home#top'
 
   get "/email_authentication" => "account_activations#email_authentication"
@@ -18,4 +20,5 @@ Rails.application.routes.draw do
     resources :comments
   end
   resources :account_activations, only: [:edit]
+  resources :password_resets, only: [:new, :create, :edit, :update]
 end

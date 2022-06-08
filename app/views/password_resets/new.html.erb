@@ -1,0 +1,9 @@
+<% provide(:title, "Forgot Password") %>
+<h1>パスワード再設定</h1>
+
+<%= form_with(url: password_resets_path, local: true) do |f| %>
+	<%= f.label :メールアドレス %>
+	<%= f.text_field :email %>
+
+	<%= f.submit "次へ" %>
+<% end %>

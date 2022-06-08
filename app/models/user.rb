@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
-  attr_accessor :activation_token
+  attr_accessor :activation_token, :reset_token
 
   VALID_NAME_REGEX = /\A(?!\s).*\z/
   validates :name,      presence: true,
@@ -27,20 +27,30 @@ class User < ApplicationRecord
 
   validates :biography, length: { maximum: 150 }
 
+  # params[:id]
   def to_param
     user_name
   end
 
-  def create_activation_token_and_digest(test_token)
-    if test_token.nil?
-      token = SecureRandom.urlsafe_base64
-    else
-      token = test_token
-    end
+  # activation
+  def create_activation_token_and_digest
+    token = SecureRandom.urlsafe_base64
     self.activation_token = token
     self.activation_digest = BCrypt::Password.create(token)
   end
 
+  def send_activation_email
+    UserMailer::account_activation(self).deliver_now
+  end
+
+  def restart_activation
+		self.activated = false
+    self.create_activation_token_and_digest
+    self.save
+    self.send_activation_email
+  end
+
+  # session
   def reset_session_token
     token = SecureRandom.alphanumeric(8)
     self.session_token = token
@@ -48,10 +58,23 @@ class User < ApplicationRecord
     return token
   end
 
-  def send_activation_email
-    UserMailer::account_activation(self).deliver_now
+  # password reset
+  def create_reset_token_and_digest
+    token = SecureRandom.urlsafe_base64
+    self.reset_token = token
+    self.reset_digest = BCrypt::Password.create(token)
   end
 
+  def send_password_reset_email
+    UserMailer::password_reset(self).deliver_now
+  end
+
+  def password_reset_expired?
+    return true if reset_sent_at.nil?
+    reset_sent_at < 2.hours.ago
+  end
+
+  # authenticate
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?

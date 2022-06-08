@@ -6,7 +6,6 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 User.create!(
-	hashed_id: "idy",
 	name: "idy",
 	user_name: "idy",
 	email: "idy@example.com",
@@ -19,7 +18,6 @@ User.create!(
 
 for i in 1..10 do
 	User.create!(
-		hashed_id: "test" + i.to_s,
 		name: "test" + i.to_s,
 		user_name: "test" + i.to_s,
 		email: "test" + i.to_s + "@example.com",
