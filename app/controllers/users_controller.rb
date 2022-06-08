@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_action :login_user, only: [:logout, :edit, :update, :destroy_form, :destroy]
+  before_action :login_user, only: [:logout, :edit, :update, :destroy_form, :destroy, :edit_email, :edit_email_form]
   before_action :not_login_user, only: [:new, :create, :login_form, :login]
-  before_action :activated_user, only: [:edit, :update]
+  before_action :activated_user, only: [:edit, :update, :edit_email, :edit_email_form]
   before_action :valid_user, only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show]
-  before_action :correct_user, only: [:edit, :update, :destroy_form, :destroy]
+  before_action :correct_user, only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy]
 
   def new
     @user = User.new
@@ -14,8 +14,7 @@ class UsersController < ApplicationController
     @user = User.new(new_params)
     @user.email = params[:user][:email].downcase
     @user.image = "admin.png"
-    @user.create_activation_token_and_digest("")
-    # @user.create_activation_token_and_digest("create") #test
+    @user.create_activation_token_and_digest
     if @user.save
       @user.send_activation_email
 		  flash[:notice] = "認証メールを送信しました"
@@ -40,11 +39,8 @@ class UsersController < ApplicationController
         flash[:notice] = "idyにようこそ！"
         redirect_to posts_url  
       else
-        user.create_activation_token_and_digest("")
-        # user.create_activation_token_and_digest("login") #test
-        user.save
-        user.send_activation_email
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
+        user.restart_activation
         redirect_to email_authentication_url(email: user.email)
       end
     else
@@ -99,15 +95,12 @@ class UsersController < ApplicationController
       flash[:dangerous] = "このメールアドレスはすでに登録されています"
       render "edit_email_form"
     else
-      @user.email = params[:email]
+      @user.email = params[:email].downcase
       if @user.authenticate(params[:password]) && @user.save
         @user.reset_session_token
         session[:user_id] = nil
         @user.activated = false
-        @user.create_activation_token_and_digest("")
-        # @user.create_activation_token_and_digest("edit_email") #test
-        @user.save
-        @user.send_activation_email
+        @user.restart_activation
         flash[:notice] = "認証メールを送信しました"
         redirect_to email_authentication_url(email: @user.email)
       else
@@ -171,12 +164,11 @@ class UsersController < ApplicationController
     end
 
     def activated_user #testまだ
-      unless @current_user.activated?
-        @current_user.reset_session_token
+      user = User.find_by(user_name: params[:id])
+      if !user.activated?
+        user.reset_session_token
         session[:user_id] = nil
-        user.create_activation_token_and_digest("")
-        # user.create_activation_token_and_digest("activated_user") #test
-        user.send_activation_email
+        user.restart_activation
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
         redirect_to email_authentication_url(email: user.email)
       end

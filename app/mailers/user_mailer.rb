@@ -9,4 +9,9 @@ class UserMailer < ApplicationMailer
     @user = user
     mail to: user.email, subject: "Idy | メール認証"
   end
+
+  def password_reset(user)
+    @user = user
+    mail to: user.email, subject: "Idy | パスワード再設定"
+  end
 end

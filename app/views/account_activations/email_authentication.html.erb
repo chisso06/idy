@@ -5,4 +5,3 @@
 <p><%= @user.email %></p>
 <p>メール内の認証リンクにアクセスすると、メールアドレスの認証が完了します</p>
 <%= link_to("認証メールをもう一度送信する", send_email_again_path(email: @user.email)) %>
-<%= link_to("メールアドレスを変更する", "/edit_email/#{@user.name}") %>

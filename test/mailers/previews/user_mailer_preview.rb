@@ -7,4 +7,10 @@ class UserMailerPreview < ActionMailer::Preview
     user.activation_token = SecureRandom.urlsafe_base64
     UserMailer.account_activation(user)
   end
-end
+
+  def password_reset
+    user = User.first
+    user.reset_token = SecureRandom.urlsafe_base64
+    UserMailer.password_reset(user)
+  end
+end  

@@ -17,22 +17,20 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_difference 'User.count', 1 do
       post users_path, params: { user: @user }
     end
+    token = assigns(:user).activation_token
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_template "user_mailer/account_activation"
     follow_redirect!
     assert_template "account_activations/email_authentication"
     assert_select "p", text: @user[:email]
-    # token_test---
-    # @user = assigns(:user)
-    # get edit_account_activation_path("create", email: @user[:email])
-    # follow_redirect!
-    # assert_template "posts/index"
-    # assert_select "a[href=?]", user_path(@user)
-    # get user_path(@user)
-    # assert_template "users/show"
-    # assert_select "h1", text: @user[:name]
-    # assert_select "p", "@#{@user[:user_name]}"
-    # ---
+    get edit_account_activation_path(token, email: @user[:email])
+    follow_redirect!
+    assert_template "posts/index"
+    assert_select "a[href=?]", user_path(@user[:user_name])
+    get user_path(@user[:user_name])
+    assert_template "users/show"
+    assert_select "h1", text: @user[:name]
+    assert_select "p", "@#{@user[:user_name]}"
   end
 
   test "unsuccessful signup with invalid token" do
@@ -41,20 +39,18 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_difference 'User.count', 1 do
       post users_path, params: { user: @user }
     end
+    token = assigns(:user).activation_token
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_template "user_mailer/account_activation"
     follow_redirect!
     assert_template "account_activations/email_authentication"
     assert_select "p", text: @user[:email]
-    # token_test---
-    # @user = assigns(:user)
-    # get edit_account_activation_path("invalid", email: @user[:email])
-    # assert_redirected_to send_email_again_path(email: @user[:email])
-    # follow_redirect!
-    # assert_equal 2, ActionMailer::Base.deliveries.size
-    # assert_template "user_mailer/account_activation"
-    # follow_redirect!
-    # assert_template "account_activations/email_authentication"
-    # ---
+    get edit_account_activation_path("invalid", email: @user[:email])
+    assert_redirected_to send_email_again_path(email: @user[:email])
+    follow_redirect!
+    assert_equal 2, ActionMailer::Base.deliveries.size
+    assert_template "user_mailer/account_activation"
+    follow_redirect!
+    assert_template "account_activations/email_authentication"
   end
 end

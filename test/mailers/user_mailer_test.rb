@@ -13,4 +13,16 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.activation_token,  mail.body.encoded.split("\r\n").map{|i| Base64.decode64(i)}.join
     assert_match CGI.escape(user.email), mail.body.encoded.split("\r\n").map{|i| Base64.decode64(i)}.join
   end
+
+  test "password_reset" do
+    user = users(:hanako)
+    user.reset_token = SecureRandom.urlsafe_base64
+    mail = UserMailer.password_reset(user)
+    assert_equal "Idy | パスワード再設定",        mail.subject
+    assert_equal [user.email],            mail.to
+    assert_equal ["milia4364@gmail.com"], mail.from
+    assert_match user.name,              mail.body.encoded.split("\r\n").map{|i| Base64.decode64(i)}.join
+    assert_match user.reset_token,  mail.body.encoded.split("\r\n").map{|i| Base64.decode64(i)}.join
+    assert_match CGI.escape(user.email), mail.body.encoded.split("\r\n").map{|i| Base64.decode64(i)}.join
+  end
 end

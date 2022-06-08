@@ -29,6 +29,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit_email_form" do
+    login(@user)
     get "/edit_email/#{@user[:user_name]}"
     assert_template "users/edit_email_form"
     assert_response :success
@@ -191,6 +192,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "successful edit_email" do
+    login(@user)
     email = "edit_email_test@example.com"
     post "/edit_email/#{@user.user_name}", params: { email: email,
                                                      password: "password" }
@@ -203,6 +205,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unsuccessful edit_email with same email-address" do
+    login(@user)
     email = @user.email
     post "/edit_email/#{@user.user_name}", params: { email: email }
     assert_not flash[:dangerous].nil?
@@ -211,6 +214,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unsuccessful edit_email with invalid email-address" do
+    login(@user)
     email = "invalid"
     post "/edit_email/#{@user.user_name}", params: { email: email }
     assert_not flash[:dangerous].nil?
