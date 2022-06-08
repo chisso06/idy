@@ -32,16 +32,19 @@ class UsersController < ApplicationController
   end
 
   def login
-    user = User.find_by(user_name: params[:user_name])
-    if user && user.authenticate(params[:password])
-      if user.activated?
-        session[:user_id] = user.reset_session_token
+    @user = User.find_by(user_name: params[:user_name])
+    if @user && @user.authenticate(params[:password])
+      if @user.activated?
+        if @user.session_expired?
+          @user.create_session_token
+        end
+        session[:user_id] = @user.session_token
         flash[:notice] = "idyにようこそ！"
         redirect_to posts_url  
       else
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
-        user.restart_activation
-        redirect_to email_authentication_url(email: user.email)
+        @user.restart_activation
+        redirect_to email_authentication_url(email: @user.email)
       end
     else
       flash[:dangerous] = "ユーザー名もしくはパスワードが間違っています"
@@ -50,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   def logout
-    @current_user.reset_session_token
+    @current_user.delete_session_token
     session[:user_id] = nil
     flash[:notice] = "ログアウトしました"
     redirect_to root_url
@@ -97,7 +100,7 @@ class UsersController < ApplicationController
     else
       @user.email = params[:email].downcase
       if @user.authenticate(params[:password]) && @user.save
-        @user.reset_session_token
+        @user.delete_session_token
         session[:user_id] = nil
         @user.activated = false
         @user.restart_activation
@@ -166,7 +169,7 @@ class UsersController < ApplicationController
     def activated_user #testまだ
       user = User.find_by(user_name: params[:id])
       if !user.activated?
-        user.reset_session_token
+        user.delete_session_token
         session[:user_id] = nil
         user.restart_activation
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"

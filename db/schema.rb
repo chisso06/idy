@@ -42,6 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
 
   create_table "users", force: :cascade do |t|
     t.string "session_token"
+    t.string "session_created_at"
     t.string "name"
     t.string "user_name"
     t.string "email"

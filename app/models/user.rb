@@ -51,11 +51,22 @@ class User < ApplicationRecord
   end
 
   # session
-  def reset_session_token
+  def create_session_token
     token = SecureRandom.alphanumeric(8)
     self.session_token = token
+    self.session_created_at = Time.zone.now
     self.save
     return token
+  end
+
+  def delete_session_token
+    self.session_token = nil
+    self.session_created_at = nil
+  end
+
+  def session_expired?
+    return true if session_created_at.nil?
+    session_created_at < 15.hours.ago
   end
 
   # password reset

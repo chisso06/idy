@@ -56,7 +56,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "before_action: login_user" do
     post logout_path
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_redirected_to login_path
     follow_redirect!
     assert_response :success
@@ -73,7 +73,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "before_action: valid_user" do
     login(@user)
     get user_path("invalid")
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_redirected_to posts_path
     follow_redirect!
     assert_response :success
@@ -82,7 +82,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "before_action: correct_user" do
     login(@user)
     get edit_user_path(@user1)
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_redirected_to posts_path
     follow_redirect!
     assert_response :success
@@ -108,7 +108,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
                                        email: @user[:email],
                                        password: "password",
                                        password_confirmation: "password" } }
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_redirected_to login_path
     follow_redirect!
     assert_template "users/login_form"
@@ -121,7 +121,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
                                        email: "",
                                        password: "",
                                        password_confirmation: "" } }
-    assert_not flash[:dangerous].nil?                                   
+    assert flash[:dangerous]
     assert_template "users/new"
     assert_response :success
   end  
@@ -129,10 +129,25 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "successful login" do
     post login_path(user_name: @user.user_name,
                     password: "password")
-    assert_not flash[:notice].nil?
+    assert flash[:notice]
     assert_redirected_to posts_path
     follow_redirect!
+    assert_template "posts/index"
     assert_response :success
+  end
+
+  test "successful login with expired session" do
+    @user.session_created_at = "Wed, 08 Jun 2021 16:56:24.902067000 UTC +00:00"
+    @user.save
+    post login_path(user_name: @user.user_name,
+                    password: "password")
+    assert flash[:notice]
+    assert_redirected_to posts_path
+    follow_redirect!
+    assert_template "posts/index"
+    assert_response :success
+    new_session_created_at = assigns(:user)
+    assert_not new_session_created_at == @user.session_created_at
   end
 
   test "unsuccessful login as not_activated_user" do
@@ -140,17 +155,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user.save
     post login_path(user_name: @user.user_name,
                     password: "password")
-    assert_not flash[:dangerous].nil?
-    assert flash[:notice].nil?, flash[:notice]
+    assert flash[:dangerous]
     assert_redirected_to email_authentication_url(email: @user.email)
     follow_redirect!
+    assert_template "account_activations/email_authentication"
     assert_response :success
   end
 
   test "unsuccessful login without enough data" do
     post login_path(user_name: "",
                     password: "")
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_template "users/login_form"
     assert_response :success
   end
@@ -158,7 +173,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "unsuccessful login with wrong password" do
     post login_path(user_name: @user.user_name,
                     password: "")
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_template "users/login_form"
     assert_response :success
   end
@@ -176,7 +191,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     login(@user)
     patch user_path(@user), params: { user: { name: "edit",
                                               biography: "edit" } }
-    assert_not flash[:notice].nil?
+    assert flash[:notice]
     assert_redirected_to user_path(@user)
     follow_redirect!
     assert_response :success
@@ -186,7 +201,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     login(@user)
     patch user_path(@user), params: { user: { name: "",
                                               biography: "edit" } }
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_template "users/edit"
     assert_response :success
   end
@@ -196,7 +211,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     email = "edit_email_test@example.com"
     post "/edit_email/#{@user.user_name}", params: { email: email,
                                                      password: "password" }
-    assert_not flash[:notice].nil?
+    assert flash[:notice]
     assert_template "user_mailer/account_activation"
     assert_redirected_to "/email_authentication?email=edit_email_test%40example.com"
     follow_redirect!
@@ -208,7 +223,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     login(@user)
     email = @user.email
     post "/edit_email/#{@user.user_name}", params: { email: email }
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_template "users/edit_email_form"
     assert_response :success
   end
@@ -217,7 +232,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     login(@user)
     email = "invalid"
     post "/edit_email/#{@user.user_name}", params: { email: email }
-    assert_not flash[:dangerous].nil?
+    assert flash[:dangerous]
     assert_template "users/edit_email_form"
     assert_response :success
   end
@@ -225,7 +240,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "successful destroy" do
     login(@user)
     delete user_path(@user), params: { password: "password" }
-    assert_not flash[:notice].nil?
+    assert flash[:notice]
     assert_redirected_to root_path
     follow_redirect!
     assert_response :success

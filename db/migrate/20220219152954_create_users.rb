@@ -2,6 +2,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
       t.string :session_token
+      t.string :session_created_at
       t.string :name
       t.string :user_name
       t.string :email
