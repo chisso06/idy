@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
     t.string "name"
     t.string "user_name"
     t.string "email"
+    t.string "new_email"
     t.string "password_digest"
     t.string "image"
     t.string "biography"

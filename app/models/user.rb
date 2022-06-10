@@ -19,6 +19,11 @@ class User < ApplicationRecord
                         format: { with: VALID_EMAIL_REGEX },
                         uniqueness: { case_sensitive: false }
 
+  validates :new_email, presence: true,
+                        length: { maximum: 255 },
+                        format: { with: VALID_EMAIL_REGEX },
+                        uniqueness: { case_sensitive: false }
+
   validates :password,  presence: true,
                         length: { minimum: 6 },
                         allow_nil: true
@@ -37,6 +42,7 @@ class User < ApplicationRecord
     token = SecureRandom.urlsafe_base64
     self.activation_token = token
     self.activation_digest = BCrypt::Password.create(token)
+    self.save
   end
 
   def send_activation_email
@@ -44,7 +50,6 @@ class User < ApplicationRecord
   end
 
   def restart_activation
-		self.activated = false
     self.create_activation_token_and_digest
     self.save
     self.send_activation_email
@@ -90,5 +95,19 @@ class User < ApplicationRecord
     digest = send("#{attribute}_digest")
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
+  end
+
+  # image
+  def make_image(image)
+    if self.image.include?(self.user_name)
+      File.delete("public/user_icons/#{self.image}")
+    end
+    if image.original_filename.include?(".png") or image.original_filename.include?(".PNG")
+      extension = ".png"
+    else
+      extension = ".jpg"
+    end
+    self.image = self.user_name + extension
+    File.binwrite("public/user_icons/#{self.image}", image.read)
   end
 end

@@ -1,15 +1,15 @@
 class PasswordResetsController < ApplicationController
 
-  before_action :exist_user, only: [:create, :edit, :update]
-	before_action :activated_user, only: [:create, :edit, :update]
+  before_action :get_user,         except: [:new]
+  before_action :exist_user,       only: [:create, :edit, :update]
+	before_action :activated_user,   only: [:create, :edit, :update]
   before_action :check_expiration, only: [:edit, :update]
-  before_action :correct_token, only: [:edit, :update]
+  before_action :correct_token,    only: [:edit, :update]
 
   def new
   end
 
   def create
-    @user = User.find_by(email: params[:email].downcase)
     @user.create_reset_token_and_digest
     @user.reset_sent_at = Time.zone.now
     @user.save
@@ -19,11 +19,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
-    @user = User.find_by(email: params[:email].downcase)
   end
 
   def update
-    @user = User.find_by(email: params[:email].downcase)
     if params[:user][:password].empty?
       flash[:dangerous] = "パスワードを入力してください"
       render 'edit'
@@ -46,36 +44,37 @@ class PasswordResetsController < ApplicationController
     end
 
     # before_action
+
+    def get_user
+      @user = User.find_by(email: params[:email].downcase)
+    end
+
     def exist_user
-      user = User.find_by(email: params[:email].downcase)
-      if user.nil?
+      if @user.nil?
         flash[:dangerous] = "このメールアドレスは登録されていません"
         redirect_to new_password_reset_url
       end
     end
 
     def activated_user
-      user = User.find_by(email: params[:email].downcase)
-      if !user.activated?
-        user.create_session_token
+      if !@user.activated?
+        @user.delete_session_token
         session[:user_id] = nil
-        user.restart_activation
+        @user.restart_activation
         flash[:dangerous] = "メールアドレスの認証がまだです。認証メールを送信しました。"
-        redirect_to email_authentication_url(email: user.email)
+        redirect_to email_authentication_url(email: @user.email)
       end
     end
 
     def check_expiration
-      user = User.find_by(email: params[:email].downcase)
-      if user.password_reset_expired?
+      if @user.password_reset_expired?
         flash[:dangerous] = "認証に失敗しました。はじめからやり直してください。"
         redirect_to new_password_reset_url
       end
     end
 
     def correct_token
-      user = User.find_by(email: params[:email].downcase)
-      if !user.authenticated?(:reset, params[:id])
+      if !@user.authenticated?(:reset, params[:id])
         flash[:dangerous] = "認証に失敗しました。はじめからやり直してください。"
         redirect_to login_url
       end  

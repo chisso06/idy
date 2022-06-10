@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample",
       name: "a" * 30,
       user_name: "sample",
-      email: "sample@example.com",
+      new_email: "sample@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png",
@@ -83,7 +83,7 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample2",
       name: "sample2",
       user_name: "sample",
-      email: "sample2@example.com",
+      new_email: "sample2@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png"
@@ -125,7 +125,7 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample2",
       name: "sample2",
       user_name: "sample2",
-      email: "sample@example.com",
+      new_email: "sample@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png"
