@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
   #
   def account_activation(user)
     @user = user
-    mail to: user.email, subject: "Idy | メール認証"
+    mail to: user.new_email, subject: "Idy | メール認証"
   end
 
   def password_reset(user)

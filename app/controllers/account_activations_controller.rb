@@ -1,7 +1,6 @@
 class AccountActivationsController < ApplicationController
 
 	before_action :get_user
-	# before_action :not_activated_user
 	before_action :exist_user
 	before_action :correct_user, only: [:email_authentication, :send_email_again]
 
@@ -15,8 +14,8 @@ class AccountActivationsController < ApplicationController
 	end
 
 	def edit
-		if @user.authenticated?(:activation, params[:id])
-			if !@user.email
+		if @user.authenticated?(:activation, params[:id]) # token が正しい状態
+			if !@user.activated? # メールアドレスの変更ではなく新規登録からの場合
 				@user.update(activated: true,
 										 activated_at: Time.zone.now)
 			end
@@ -24,42 +23,56 @@ class AccountActivationsController < ApplicationController
 									 new_email: nil,
 									 activation_digest: nil)
 			@user.save
-			if session[:user_id].nil?
-				session[:user_id] = @user.create_session_token
-			end
+			# ログイン
 			flash[:notice] = "メールアドレスの認証が完了しました"
-			redirect_to posts_url
+			if session[:user_id].nil?
+				redirect_to login_url
+			else
+				redirect_to posts_url
+			end
 		else
 			flash[:dangerous] = "認証に失敗しました。認証メールをもう一度送信します。"
 			redirect_to send_email_again_url(email: @user.new_email)
-			end
 		end
 	end
 
 	private
 
 		def get_user
-			@user = User.find_by(new_email: params[:email].downcase)
+			if params[:email]
+				@user = User.find_by(new_email: params[:email].downcase)
+			else
+				flash[:dangerous] = "問題が発生しました。やり直してください。"
+				redirect_back fallback_location: posts_url
+			end
 		end
 
 		def exist_user
 			if @user.nil?
-				if User.find_by(email: params[:email].downcase)
-					flash[:notice] = "すでに認証が完了しています"
-					redirect_to @user
+				@user = User.find_by(email: params[:email].downcase)
+				if @user
+					if @user.activated?
+						flash[:notice] = "すでに認証が完了しています"
+						if @current_user
+							redirect_to posts_url
+						else
+							redirect_to login_url
+						end
+					else
+						flash[:dangerous] = "予期せぬエラーが発生しました"
+						redirect_back fallback_location: posts_url
+					end
 				else
 					flash[:dangerous] = "このメールアドレスは登録されていません"
-					redirect_to new_user_url
+					redirect_back fallback_location: posts_url
 				end
 			end
 		end
 
-		# メールアドレスを変更したいユーザーが正しいユーザーでログインしているかどうかの確認
 		def correct_user
-			if @user.email && !@user.authenticated(:session, session[:user_id])
+			if (@current_user && @user.id != @current_user.id) && !@current_user.admin?
 				flash[:dangerous] = "権限がありません"
-				redirect_to posts_url
+				redirect_back fallback_location: posts_url
 			end
 		end
-
 end

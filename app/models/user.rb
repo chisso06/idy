@@ -14,15 +14,15 @@ class User < ApplicationRecord
                         uniqueness: { case_sensitive: false }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email,     presence: true,
-                        length: { maximum: 255 },
+  validates :email,     length: { maximum: 255 },
                         format: { with: VALID_EMAIL_REGEX },
-                        uniqueness: { case_sensitive: false }
+                        uniqueness: { case_sensitive: false },
+                        allow_nil: true
 
-  validates :new_email, presence: true,
-                        length: { maximum: 255 },
+  validates :new_email, length: { maximum: 255 },
                         format: { with: VALID_EMAIL_REGEX },
-                        uniqueness: { case_sensitive: false }
+                        uniqueness: { case_sensitive: false },
+                        allow_nil: true 
 
   validates :password,  presence: true,
                         length: { minimum: 6 },
@@ -51,7 +51,6 @@ class User < ApplicationRecord
 
   def restart_activation
     self.create_activation_token_and_digest
-    self.save
     self.send_activation_email
   end
 
@@ -71,7 +70,7 @@ class User < ApplicationRecord
 
   def session_expired?
     return true if session_created_at.nil?
-    session_created_at < 15.hours.ago
+    session_created_at < 24.hours.ago
   end
 
   # password reset

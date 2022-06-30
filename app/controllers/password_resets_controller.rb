@@ -22,7 +22,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    if params[:user][:password].empty?
+    if params[:user][:password].nil?
       flash[:dangerous] = "パスワードを入力してください"
       render 'edit'
     elsif @user.update(user_params)
@@ -46,7 +46,12 @@ class PasswordResetsController < ApplicationController
     # before_action
 
     def get_user
-      @user = User.find_by(email: params[:email].downcase)
+      if params[:email]
+        @user = User.find_by(email: params[:email].downcase)
+      else
+        flash[:dangerous] = "メールアドレスを入力してください"
+        render 'edit'
+      end
     end
 
     def exist_user
