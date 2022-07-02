@@ -48,6 +48,9 @@ class PasswordResetsController < ApplicationController
     def get_user
       if params[:email]
         @user = User.find_by(email: params[:email].downcase)
+        if @user.nil?
+          @user = User.find_by(new_email: params[:email].downcase)
+        end
       else
         flash[:dangerous] = "メールアドレスを入力してください"
         render 'edit'
@@ -63,6 +66,7 @@ class PasswordResetsController < ApplicationController
 
     def activated_user
       if !@user.activated?
+        debugger
         @user.delete_session_token
         session[:user_id] = nil
         @user.restart_activation
@@ -73,7 +77,7 @@ class PasswordResetsController < ApplicationController
 
     def check_expiration
       if @user.password_reset_expired?
-        flash[:dangerous] = "認証に失敗しました。はじめからやり直してください。"
+        flash[:dangerous] = "認証期限が切れています。はじめからやり直してください。"
         redirect_to new_password_reset_url
       end
     end
@@ -81,7 +85,7 @@ class PasswordResetsController < ApplicationController
     def correct_token
       if !@user.authenticated?(:reset, params[:id])
         flash[:dangerous] = "認証に失敗しました。はじめからやり直してください。"
-        redirect_to login_url
-      end  
+        redirect_to new_password_reset_url
+      end
     end
 end

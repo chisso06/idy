@@ -71,7 +71,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "before_action: not_registered_user" do
-    post new_user_path(@user)
+    post users_path, params: { user: { name: @user.name,
+                                       email: @user.email,
+                                       user_name: @user.user_name,
+                                       password: @user.password,
+                                       password_confirmation: @user.password } }
     assert flash[:dangerous]
     assert_redirected_to login_path
     follow_redirect!

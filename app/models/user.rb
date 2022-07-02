@@ -85,14 +85,16 @@ class User < ApplicationRecord
   end
 
   def password_reset_expired?
-    return true if reset_sent_at.nil?
-    reset_sent_at < 2.hours.ago
+    if self.reset_sent_at
+      self.reset_sent_at < 2.hours.ago
+    end
   end
 
   # authenticate
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
+    return false if token.nil?
     BCrypt::Password.new(digest).is_password?(token)
   end
 
