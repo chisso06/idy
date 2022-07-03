@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample",
       name: "a" * 30,
       user_name: "sample",
-      email: "sample@example.com",
+      new_email: "sample@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png",
@@ -83,7 +83,7 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample2",
       name: "sample2",
       user_name: "sample",
-      email: "sample2@example.com",
+      new_email: "sample2@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png"
@@ -92,11 +92,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   # email test
-  test "email should be presence" do
-    @user.email = ""
-    assert_not @user.valid?
-  end
-
   test "email shold not be too long" do
     @user.email = "a" * 244 + "@example.com"
     assert_not @user.valid?
@@ -125,7 +120,45 @@ class UserTest < ActiveSupport::TestCase
       session_token: "sample2",
       name: "sample2",
       user_name: "sample2",
-      email: "sample@example.com",
+      new_email: "sample@example.com",
+      password: "password",
+      password_confirmation: "password",
+      image: "admin.png"
+    )
+    user.save
+    assert_not @user.valid?
+  end
+
+  # new_email test
+  test "new_email shold not be too long" do
+    @user.new_email = "a" * 244 + "@example.com"
+    assert_not @user.valid?
+  end
+
+  test "new_email validation should accept valid addresses" do
+    valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
+                         first.last@foo.jp alice+bob@baz.cn]
+    valid_addresses.each do |valid_address|
+      @user.new_email = valid_address
+      assert @user.valid?
+    end
+  end
+
+  test "new_email validation should reject invalid addresses" do
+    invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
+                           foo@bar_baz.com foo @bar+baz.com]
+    invalid_addresses.each do |invalid_address|
+      @user.new_email = invalid_address
+      assert_not @user.valid?
+    end
+  end
+
+  test "new_email should be unique(new_email)" do
+    user = User.new(
+      session_token: "sample2",
+      name: "sample2",
+      user_name: "sample2",
+      new_email: "sample@example.com",
       password: "password",
       password_confirmation: "password",
       image: "admin.png"

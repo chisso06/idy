@@ -14,17 +14,20 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    @user.reset_digest = BCrypt::Password.create("should_get_edit_test")
+    token = "test-token"
+    @user.reset_digest = BCrypt::Password.create(token)
     @user.reset_sent_at = Time.zone.now
     @user.save
-    get edit_password_reset_url("should_get_edit_test", email: @user.email)
+    get edit_password_reset_url(token), params: { email: @user.email }
+    assert flash[:dangerous].nil?, flash[:dangerous]
     assert_template "password_resets/edit"
     assert_response :success
   end
 
   # before_action test
   test "before_action :exist_user" do
-    get password_resets_edit_url(email: "invalid")
+    token = "test-token"
+    get password_resets_edit_url(token, email: "invalid")
     assert flash[:dangerous]
     assert_redirected_to new_password_reset_url
     follow_redirect!
@@ -33,9 +36,10 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "before_action :activated_user" do
+    token = "test-token"
     @user.activated = false
     @user.save
-    get password_resets_edit_url(email: @user.email)
+    get password_resets_edit_url(token, email: @user.email)
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert flash[:dangerous]
     assert_redirected_to email_authentication_url(email: @user.email)
@@ -46,7 +50,11 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "before_action :check_expiration" do
-    get password_resets_edit_url(email: @user.email)
+    token = "check-expiration"
+    @user.reset_digest = BCrypt::Password.create(token)
+    @user.reset_sent_at = Time.zone.yesterday
+    @user.save
+    get password_resets_edit_url(token, email: @user.email)
     assert flash[:dangerous]
     assert_redirected_to new_password_reset_url
     follow_redirect!
@@ -77,6 +85,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
           params: { email: @user.email,
                     user: { password: "new_password",
                             password_confirmation: "new_password" } }
+    assert flash[:dangerous].nil?, flash[:dangerous]
     assert flash[:notice]
     assert_redirected_to login_url
     follow_redirect!

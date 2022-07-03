@@ -11,6 +11,7 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
     login(@user)
     get post_path(@post)
     get post_likes_path(@post)
+    assert_template "likes/index"
     assert_response :success
   end
 
@@ -19,6 +20,7 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
     assert_not flash[:dangerous].nil?
     assert_redirected_to login_path
     follow_redirect!
+    assert_template "users/login_form"
     assert_response :success
   end
 end

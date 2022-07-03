@@ -70,6 +70,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "before_action: not_registered_user" do
+    post users_path, params: { user: { name: @user.name,
+                                       email: @user.email,
+                                       user_name: @user.user_name,
+                                       password: @user.password,
+                                       password_confirmation: @user.password } }
+    assert flash[:dangerous]
+    assert_redirected_to login_path
+    follow_redirect!
+    assert_response :success
+  end
+
   test "before_action: valid_user" do
     login(@user)
     get user_path("invalid")
@@ -102,30 +114,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "unsuccessful create with registered email" do
-    post users_path, params: { user: { name: "sample",
-                                       user_name: "sample",
-                                       email: @user[:email],
-                                       password: "password",
-                                       password_confirmation: "password" } }
-    assert flash[:dangerous]
-    assert_redirected_to login_path
-    follow_redirect!
-    assert_template "users/login_form"
-    assert_response :success
-  end
-
-  test "unsuccessful create without enough data" do
-    post users_path, params: { user: { name: "",
-                                       user_name: "",
-                                       email: "",
-                                       password: "",
-                                       password_confirmation: "" } }
-    assert flash[:dangerous]
-    assert_template "users/new"
-    assert_response :success
-  end  
-
   test "successful login" do
     post login_path(user_name: @user.user_name,
                     password: "password")
@@ -151,6 +139,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unsuccessful login as not_activated_user" do
+    @user.new_email = @user.email
+    @user.email = nil
     @user.activated = false
     @user.save
     post login_path(user_name: @user.user_name,
@@ -172,7 +162,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "unsuccessful login with wrong password" do
     post login_path(user_name: @user.user_name,
-                    password: "")
+                    password: "wrong")
     assert flash[:dangerous]
     assert_template "users/login_form"
     assert_response :success
@@ -219,19 +209,40 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "unsuccessful edit_email with same email-address" do
+  test "unsuccessful edit_email with registered email" do
     login(@user)
     email = @user.email
-    post "/edit_email/#{@user.user_name}", params: { email: email }
+    post "/edit_email/#{@user.user_name}", params: { email: email,
+                                                     password: "password" }
     assert flash[:dangerous]
     assert_template "users/edit_email_form"
     assert_response :success
   end
 
-  test "unsuccessful edit_email with invalid email-address" do
+  test "unsuccessful edit_email with without email" do
+    login(@user)
+    post "/edit_email/#{@user.user_name}", params: { email: "",
+                                                     password: "password" }
+    assert flash[:dangerous]
+    assert_template "users/edit_email_form"
+    assert_response :success
+  end
+
+  test "unsuccessful edit_email with with invalid-email" do
     login(@user)
     email = "invalid"
-    post "/edit_email/#{@user.user_name}", params: { email: email }
+    post "/edit_email/#{@user.user_name}", params: { email: email,
+                                                     password: "password" }
+    assert flash[:dangerous]
+    assert_template "users/edit_email_form"
+    assert_response :success
+  end
+
+  test "unsuccessful edit_email with wrong password" do
+    login(@user)
+    email = "edit_email_test@example.com"
+    post "/edit_email/#{@user.user_name}", params: { email: email,
+                                                     password: "wrong" }
     assert flash[:dangerous]
     assert_template "users/edit_email_form"
     assert_response :success

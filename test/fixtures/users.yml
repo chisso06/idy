@@ -10,20 +10,26 @@ hanako:
   name: hanako
   user_name: hanako
   email: hanako@example.com
+  new_email: nil
   image: admin.png
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
+  reset_digest: nil
+  reset_sent_at: nil
   admin: false
 
 tarou:
   id: 2
   session_token: "2"
-  name: dummy
-  user_name: dummy
-  email: dummy@example.com
+  name: tarou
+  user_name: tarou
+  email: tarou@example.com
+  new_email: nil
   image: admin.png
   password_digest: <%= BCrypt::Password.create("password") %>
   activated: true
   activated_at: <%= Time.zone.now %>
+  reset_digest: nil
+  reset_sent_at: nil
   admin: false

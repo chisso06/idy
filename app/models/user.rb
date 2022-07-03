@@ -14,10 +14,15 @@ class User < ApplicationRecord
                         uniqueness: { case_sensitive: false }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email,     presence: true,
-                        length: { maximum: 255 },
+  validates :email,     length: { maximum: 255 },
                         format: { with: VALID_EMAIL_REGEX },
-                        uniqueness: { case_sensitive: false }
+                        uniqueness: { case_sensitive: false },
+                        allow_nil: true
+
+  validates :new_email, length: { maximum: 255 },
+                        format: { with: VALID_EMAIL_REGEX },
+                        uniqueness: { case_sensitive: false },
+                        allow_nil: true 
 
   validates :password,  presence: true,
                         length: { minimum: 6 },
@@ -37,6 +42,7 @@ class User < ApplicationRecord
     token = SecureRandom.urlsafe_base64
     self.activation_token = token
     self.activation_digest = BCrypt::Password.create(token)
+    self.save
   end
 
   def send_activation_email
@@ -44,9 +50,7 @@ class User < ApplicationRecord
   end
 
   def restart_activation
-		self.activated = false
     self.create_activation_token_and_digest
-    self.save
     self.send_activation_email
   end
 
@@ -66,7 +70,7 @@ class User < ApplicationRecord
 
   def session_expired?
     return true if session_created_at.nil?
-    session_created_at < 15.hours.ago
+    session_created_at < 24.hours.ago
   end
 
   # password reset
@@ -81,14 +85,30 @@ class User < ApplicationRecord
   end
 
   def password_reset_expired?
-    return true if reset_sent_at.nil?
-    reset_sent_at < 2.hours.ago
+    if self.reset_sent_at
+      self.reset_sent_at < 2.hours.ago
+    end
   end
 
   # authenticate
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
+    return false if token.nil?
     BCrypt::Password.new(digest).is_password?(token)
+  end
+
+  # image
+  def make_image(image)
+    if self.image.include?(self.user_name)
+      File.delete("public/user_icons/#{self.image}")
+    end
+    if image.original_filename.include?(".png") or image.original_filename.include?(".PNG")
+      extension = ".png"
+    else
+      extension = ".jpg"
+    end
+    self.image = self.user_name + extension
+    File.binwrite("public/user_icons/#{self.image}", image.read)
   end
 end
