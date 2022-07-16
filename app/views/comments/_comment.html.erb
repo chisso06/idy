@@ -1,0 +1,11 @@
+<%= form_with(url: post_comments_path(@post), local: true) do |f| %>
+	<%= f.text_area :content %>
+	<%= f.submit "コメントを追加" %>
+<% end %>
+<% @comments.each do |comment| %>
+	<%= link_to(comment.user.name, user_path(comment.user)) %>
+	<p><%= comment.content %></p>
+	<% if comment.user_id == @current_user.id %>
+		<%= button_to("コメントを削除", post_comment_path(@post, comment), method: :delete) %>
+	<% end %>
+<% end %>

@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :login_user,          only: [:logout, :edit, :update, :destroy_form, :destroy, :edit_email, :edit_email_form]
+  before_action :login_user,          only: [:logout, :edit, :update, :destroy_form, :destroy, :edit_email, :edit_email_form, :following, :followers]
   before_action :not_login_user,      only: [:new, :create, :login_form, :login]
   before_action :not_registered_user, only: [:create]
-  before_action :valid_user,          only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show]
+  before_action :valid_user,          only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show, :following, :followers]
   before_action :correct_user,        only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy]
 
   def new
@@ -130,6 +130,24 @@ class UsersController < ApplicationController
     @user = User.find_by(user_name: params[:id])
     @posts = Post.where(user_id: @user.id)
     @likes = Like.where(user_id: @user.id)
+  end
+
+  def index
+    @users = User.all
+  end
+
+  def following
+    @title = "Following"
+    @user = User.find_by(user_name: params[:id])
+    @users = @user.following
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find_by(user_name: params[:id])
+    @users = @user.followers
+    render 'show_follow'
   end
 
   private

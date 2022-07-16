@@ -1,0 +1,6 @@
+<%= link_to("いいねしたユーザー", post_likes_path(@post)) %>
+<% if @like.nil? %>
+	<p>いいねする</p><%= button_to(@likes.count, post_likes_path(@post), method: :post) %>
+<% else %>
+	<p>いいねを取り消す</p><%= button_to(@likes.count, post_like_path(@post, @like), method: :delete) %>
+<% end %>

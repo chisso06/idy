@@ -5,6 +5,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
 User.create!(
 	name: "idy",
 	user_name: "idy",
@@ -28,3 +29,10 @@ for i in 1..10 do
 		admin: 0
 	)
 end
+
+users = User.all
+user  = users.first
+following = users[2..8]
+followers = users[4..10]
+following.each { |followed| user.follow(followed) }
+followers.each { |follower| follower.follow(user) }
