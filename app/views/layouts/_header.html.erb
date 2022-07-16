@@ -4,6 +4,7 @@
   <%= link_to("ログイン", login_path) %>
 <% else %>
   <%= link_to("Home", "#") %>
+  <%= link_to("ユーザー一覧", users_path) %>
   <%= link_to("MyPage", user_path(@current_user)) %>
   <%= link_to("みんなのアイデア", posts_path) %>
   <%= link_to("電球", new_post_path) %>
