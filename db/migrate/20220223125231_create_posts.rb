@@ -6,6 +6,5 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.belongs_to :user, dependent: :destroy
       t.timestamps
     end
-    add_foreign_key :posts, :users, on_delete: :cascade
   end
 end

@@ -39,6 +39,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "relationships", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "followed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "session_token"
     t.string "session_created_at"
@@ -63,9 +73,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_01_083742) do
     t.index ["user_name"], name: "index_users_on_user_name"
   end
 
-  add_foreign_key "comments", "posts", on_delete: :cascade
-  add_foreign_key "comments", "users", on_delete: :cascade
-  add_foreign_key "likes", "posts", on_delete: :cascade
-  add_foreign_key "likes", "users", on_delete: :cascade
-  add_foreign_key "posts", "users", on_delete: :cascade
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
+  add_foreign_key "posts", "users"
 end

@@ -11,23 +11,8 @@
 	<% end %>
 
 	<hr>
-	<%= link_to("いいねしたユーザー", post_likes_path(@post)) %>
-	<% if @like.nil? %>
-		<p>いいねする</p><%= button_to(@likes.count, post_likes_path(@post), method: :post) %>
-	<% else %>
-		<p>いいねを取り消す</p><%= button_to(@likes.count, post_like_path(@post, @like), method: :delete) %>
-	<% end %>
+  <%= render 'likes/like' %>
 
 	<hr>
-	<%= form_with(url: post_comments_path(@post), local: true) do |f| %>
-		<%= f.text_area :content %>
-		<%= f.submit "コメントを追加" %>
-	<% end %>
-	<% @comments.each do |comment| %>
-		<%= link_to(comment.user.name, user_path(comment.user)) %>
-		<p><%= comment.content %></p>
-		<% if comment.user_id == @current_user.id %>
-			<%= button_to("コメントを削除", post_comment_path(@post, comment), method: :delete) %>
-		<% end %>
-	<% end %>
+  <%= render 'comments/comment' %>
 </div>

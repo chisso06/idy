@@ -3,10 +3,20 @@
 <h1><%= @user.name %></h1>
 <p>@<%= @user.user_name %></p>
 <p><%= @user.biography %></p>
+<a href="<%= following_user_path(@user) %>"><%= @user.following.count %>following</a>
+<a href="<%= followers_user_path(@user) %>"><%= @user.followers.count %>followers</a>
+
+<br>
 
 <% if @current_user %>
 	<% if @current_user.id == @user.id %>
 		<%= link_to("Setting", edit_user_path(@user)) %>
+	<% else %>
+		<% if @current_user.following?(@user) %>
+			<%= button_to("フォロー中", relationship_path(id: @user.user_name), method: :delete) %>
+		<% else %>
+			<%= button_to("フォロー", relationships_path(id: @user.user_name), method: :post) %>
+		<% end %>
 	<% end %>
 <% end %>
 
