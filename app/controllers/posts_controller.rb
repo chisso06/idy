@@ -11,6 +11,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user_id = @current_user.id
     if @post.save
+      @post.create_tag
       flash[:notice] = "アイデアを投稿しました！"
       redirect_to post_url(@post)
     else
@@ -54,7 +55,7 @@ class PostsController < ApplicationController
   private
 
     def post_params
-      params.require(:post).permit(:title, :category, :content)
+      params.require(:post).permit(:title, :content)
     end
 
     def login_user

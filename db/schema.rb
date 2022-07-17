@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_04_090332) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_16_070214) do
   create_table "comments", force: :cascade do |t|
     t.string "content"
     t.integer "user_id"
@@ -33,7 +33,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_090332) do
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "content"
-    t.string "category"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -48,6 +47,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_090332) do
     t.index ["followed_id"], name: "index_relationships_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag"], name: "index_tags_on_tag"
   end
 
   create_table "users", force: :cascade do |t|
