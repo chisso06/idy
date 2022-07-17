@@ -4,7 +4,6 @@
 	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user)) %></p>
 	<p>作成日：<%= @post.created_at %></p>
 	<p>更新日：<%= @post.updated_at %></p>
-	<p>カテゴリー：<%= @post.category %></p>
 	<p>内容：<%= @post.content %></p>
 	<% if @post.user_id == @current_user.id %>
 		<%= link_to("編集", edit_post_path(@post)) %>
