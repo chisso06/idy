@@ -17,10 +17,10 @@
     <%= f.label :Username %>
     @<%= f.text_field :user_name %>
     <br>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+    <br>
   <% end %>
-  <%= f.label :email %>
-  <%= f.email_field :email %>
-  <br>
   <% if @user.new_record? %>
     <%= f.label :password %>
     <%= f.password_field :password %>

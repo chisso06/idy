@@ -4,8 +4,7 @@
 
 <%= render "users/form" %>
 
-<p>メールアドレス <%= @user.email %></p>
-<%= link_to("変更", "/edit_email/#{@user.user_name}") %>
+<%= link_to("メールアドレス変更", "/edit_email/#{@user.user_name}") %>
 <br>
 <%= link_to("パスワードを変更する", "#") %>
 <br>

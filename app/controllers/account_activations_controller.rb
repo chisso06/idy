@@ -9,7 +9,6 @@ class AccountActivationsController < ApplicationController
 
 	def send_email_again
 		@user.restart_activation
-		flash[:notice] = "認証メールを送信しました"
 		redirect_to email_authentication_url(email: @user.new_email)
 	end
 
@@ -24,14 +23,14 @@ class AccountActivationsController < ApplicationController
 									 activation_digest: nil)
 			@user.save
 			# ログイン
-			flash[:notice] = "メールアドレスの認証が完了しました"
+			flash[:notice] = COMPLETE_EMAIL_AUTHENTICATION_MESSAGE
 			if session[:user_id].nil?
 				redirect_to login_url
 			else
 				redirect_to posts_url
 			end
 		else
-			flash[:dangerous] = "認証に失敗しました。認証メールをもう一度送信します。"
+			flash[:dangerous] = FAIL_AUTHENTICATE_MESSAGE
 			redirect_to send_email_again_url(email: @user.new_email)
 		end
 	end
@@ -42,8 +41,8 @@ class AccountActivationsController < ApplicationController
 			if params[:email]
 				@user = User.find_by(new_email: params[:email].downcase)
 			else
-				flash[:dangerous] = "問題が発生しました。やり直してください。"
-				redirect_back fallback_location: posts_url
+				flash[:dangerous] = UNEXPECTED_ERROR_MESSAGE
+				redirect_back(fallback_location: posts_url)
 			end
 		end
 
@@ -52,27 +51,27 @@ class AccountActivationsController < ApplicationController
 				@user = User.find_by(email: params[:email].downcase)
 				if @user
 					if @user.activated?
-						flash[:notice] = "すでに認証が完了しています"
+						flash[:notice] = ALREADY_AUTHENTICATED_MASSAGE
 						if @current_user
 							redirect_to posts_url
 						else
 							redirect_to login_url
 						end
 					else
-						flash[:dangerous] = "予期せぬエラーが発生しました"
-						redirect_back fallback_location: posts_url
+						flash[:dangerous] = UNEXPECTED_ERROR_MESSAGE
+						redirect_back(fallback_location: posts_url)
 					end
 				else
-					flash[:dangerous] = "このメールアドレスは登録されていません"
-					redirect_back fallback_location: posts_url
+					flash[:dangerous] = NOT_REGISTERED_EMAIL_MESSAGE
+					redirect_back(fallback_location: posts_url)
 				end
 			end
 		end
 
 		def correct_user
 			if (@current_user && @user.id != @current_user.id) && !@current_user.admin?
-				flash[:dangerous] = "権限がありません"
-				redirect_back fallback_location: posts_url
+				flash[:dangerous] = NO_AUTHORITY_MESSAGE
+				redirect_back(fallback_location: posts_url)
 			end
 		end
 end

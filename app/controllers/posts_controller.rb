@@ -2,6 +2,7 @@ class PostsController < ApplicationController
 
   before_action :login_user
   before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :get_post, only: [:edit, :update, :destroy, :show]
 
   def new
     @post = Post.new
@@ -11,7 +12,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user_id = @current_user.id
     if @post.save
-      flash[:notice] = "アイデアを投稿しました！"
+      flash[:notice] = SUCCESSFUL_POST_MESSAGE
       redirect_to post_url(@post)
     else
       render "new"
@@ -19,28 +20,25 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = Post.find_by(id: params[:id])
   end
 
   def update
-    @post = Post.find_by(id: params[:id])
     if @post.update(post_params)
-      flash[:notice] = "変更を保存しました"
+      flash[:notice] = SAVE_MESSAGE
       redirect_to post_url(@post)
     else
-      flash[:dangerous] = "保存に失敗しました"
+      flash[:dangerous] = CANNOT_SAVE_MESSAGE
       render "edit"
     end
   end
 
   def destroy
-    Post.find_by(id: params[:id]).destroy
-    flash[:notice] = "投稿を削除しました"
+    @post.destroy
+    flash[:notice] = DESTROY_POST_MESSAGE
     redirect_to posts_url
   end
 
   def show
-    @post = Post.find_by(id: params[:id])
     @like = Like.find_by(user_id: @current_user.id, post_id: params[:id])
     @likes = Like.where(post_id: params[:id])
     @comment = Comment.new
@@ -59,7 +57,7 @@ class PostsController < ApplicationController
 
     def login_user
       if @current_user.nil?
-        flash[:dangerous] = "ログインしてください"
+        flash[:dangerous] = NEED_LOGIN_MESSAGE
         redirect_to login_url
       end
     end
@@ -67,8 +65,16 @@ class PostsController < ApplicationController
     def correct_user
       post = Post.find_by(id: params[:id])
       if post.user_id != @current_user.id && !@current_user.admin?
-        flash[:dangerous] = "権限がありません"
-        redirect_to posts_url
+        flash[:dangerous] = NO_AUTHORITY_MESSAGE
+        redirect_back(fallback_location: posts_path)
+      end
+    end
+
+    def get_post
+      @post = Post.find_by(id: params[:id])
+      if @post.nil?
+        flash[:notice] = NOT_EXIST_POST_MESSAGE
+        redirect_back(fallback_location: posts_path)
       end
     end
 end
