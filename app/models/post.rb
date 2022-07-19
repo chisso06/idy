@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy
   validates :title, presence: true, length: { maximum: 20 }
-  validates :content, presence: true
+  validates :content, presence: true, length: { maximum: 400 }
   validates :user_id, presence: true
 
   def user
