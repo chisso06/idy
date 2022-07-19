@@ -49,8 +49,8 @@ class UsersController < ApplicationController
       redirect_to posts_url
     elsif @user.nil? && @not_activated_user && @not_activated_user.authenticate(params[:password]) # not activated
       flash[:dangerous] = EMAIL_AUTHENTICATION_MESSAGE
-      @user.restart_activation
-      redirect_to email_authentication_url(email: @user.new_email)
+      @not_activated_user.restart_activation
+      redirect_to email_authentication_url(email: @not_activated_user.new_email)
     else
       flash[:dangerous] = WRONG_LOGIN_MESSAGE
       render "login_form"
