@@ -2,6 +2,7 @@
   <% @posts.each do |post| %>
     <%= link_to("@" + post.user.user_name, user_path(post.user)) %>
     <%= link_to(post.title, post_path(post)) %>
+    <%= post.content.slice(0..100) %>
     <%= post.created_at %>
     <br>
   <% end %>
