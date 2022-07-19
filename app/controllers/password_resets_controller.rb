@@ -14,7 +14,7 @@ class PasswordResetsController < ApplicationController
     @user.reset_sent_at = Time.zone.now
     @user.save
     @user.send_password_reset_email
-    flash[:notice] = SEND_PASSWORD_RESET_EMAIL
+    flash[:notice] = SEND_PASSWORD_RESET_EMAIL_MESSAGE
     redirect_to login_url
   end
 

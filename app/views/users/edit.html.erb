@@ -6,6 +6,4 @@
 
 <%= link_to("メールアドレス変更", "/edit_email/#{@user.user_name}") %>
 <br>
-<%= link_to("パスワードを変更する", "#") %>
-<br>
 <%= button_to("Log Out", logout_path, method: :post) %>
