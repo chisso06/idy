@@ -1,18 +1,34 @@
 <% provide(:title, @post.title) %>
-<h1><%= @post.title %></h1>
-<div>
-	<p>発案者：<%= link_to(@post.user.name, user_path(@post.user)) %></p>
-	<p>作成日：<%= @post.created_at %></p>
-	<p>更新日：<%= @post.updated_at %></p>
-	<p>内容：<%= @post.content %></p>
-	<% if @post.user_id == @current_user.id %>
-		<%= link_to("編集", edit_post_path(@post)) %>
-		<%= button_to("削除", post_path(@post), method: :delete) %>
-	<% end %>
+<% post = @post %>
+<% user = @post.user %>
+<div class="container p-0">
+	<h1><%= @post.title %></h1>
+	<div class="d-flex align-items-center">
+		<!-- user info -->
+		<div class="d-flex my-3 align-items-center">
+			<a href="<%= user_path(user) %>" class="me-3"><img src="/user_icons/<%= user.image %>" alt="icon" class="profile-icon small-icon"></a>
+			<div>
+				<p class="m-0"><a href="<%= user_path(user) %>" class="h6 text-dark me-1"><%= user.name %></a></p>
+				<p class="m-0 mt-n1"><a href="<%= user_path(user) %>" class="small text-muted me-1"><u>@<%= user.user_name %></u></a></p>
+			</div>
+		</div>
+		<!-- option -->
+		<%= render partial: 'posts/edit_option', locals: { post: @post } %>
+	</div>
 
-	<hr>
-  <%= render 'likes/like' %>
+	<!-- content -->
+	<p><%= @post.content %></p>
+	<p class="small text-muted"><%= @post.created_at.strftime('%Y/%m/%d %H:%M:%S') %></p>
 
-	<hr>
-  <%= render 'comments/comment' %>
+	<hr class="m-0">
+	<div class="px-2 my-2">
+		<%= render partial: 'posts/post_footer', locals: { post: @post }  %>
+	</div>
+
+	<!-- comment -->
+	<hr class="m-0">
+	<%= render partial: 'comments/new_comment', locals: { post: @post, comments: @comments }  %>
+	<hr class="m-0">
+	<%= render partial: 'comments/comments', locals: { post: @post, comments: @comments }  %>
+
 </div>

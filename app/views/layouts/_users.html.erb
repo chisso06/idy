@@ -1,7 +1,15 @@
-<% if @users.empty? %>
-	<p><%= yield(:null_message) %></p>
+<% if users.empty? %>
+	<p class="text-center"><%= null_message %></p>
 <% else %>
-	<% @users.each do |user| %>
-		<%= link_to(user.name, user_path(user)) %>
+	<% users.each do |user| %>
+		<!-- user info -->
+		<div class="d-flex py-3 border-bottom">
+			<a href="<%= user_path(user) %>" class="me-3"><img src="/user_icons/<%= user.image %>" alt="icon" class="profile-icon small-icon"></a>
+			<div>
+				<p class="m-0"><a href="<%= user_path(user) %>" class="h6 text-dark me-1"><%= user.name %></a></p>
+				<p class="m-0 mt-n1"><a href="<%= user_path(user) %>" class="small text-muted me-1"><u>@<%= user.user_name %></u></a></p>
+				<p class="m-0"><%= user.biography %></p>
+			</div>
+		</div>
 	<% end %>
 <% end %>

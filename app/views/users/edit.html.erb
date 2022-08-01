@@ -1,9 +1,0 @@
-<% provide(:title, "Setting") %>
-<% provide(:button_text, "Save") %>
-<h1>Setting</h1>
-
-<%= render "users/form" %>
-
-<%= link_to("メールアドレス変更", "/edit_email/#{@user.user_name}") %>
-<br>
-<%= button_to("Log Out", logout_path, method: :post) %>

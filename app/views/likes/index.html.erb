@@ -1,6 +1,0 @@
-<% provide(:title, @post.title) %>
-<h1>いいねしたユーザー</h1>
-
-<% provide(:null_message, "このアイデアをいいねしたユーザーはまだいません") %>
-<%= render "layouts/users" %>
-<%= link_to("アイデアに戻る", post_path(@post)) %>

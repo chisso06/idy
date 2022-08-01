@@ -1,38 +1,69 @@
-<%= form_with(model: @user, local: true) do |f| %>
-
-  <% if @user.errors.any? %>
+<%= form_with(url: url, model: user, local: true) do |f| %>
+  <% if user.errors.any? %>
     <p>error!</p>
   <% end %>
 
-  <% unless @user.new_record? %>
-    <img id="preview" src="/user_icons/<%= @user.image %>" alt="icon" width=50px height=50px style="border-radius:100%; object-fit:cover;">
-    <%= f.file_field :image, accept: ".png,.jpg", onchange: "previewImage(this);" %>
+  <% if item.include?("image") %>
+    <div class="form-outline mb-2">
+      <p class="m-0"><%= f.label :"Profile Image", class: "form-label" %></p>
+      <img src="/user_icons/<%= user.image %>" class="mb-2" id="preview" alt="icon" width=50px height=50px style="border-radius:100%; object-fit:cover;">
+      <%= f.file_field :image, accept: ".png,.jpg", onchange: "previewImage(this)", class: "form-control border", id: "customFile" %>
+    </div>
   <% end %>
-  <br>
 
-  <%= f.label :Name %>
-  <%= f.text_field :name %>
-  <br>
-  <% if @user.new_record? %>
-    <%= f.label :Username %>
-    @<%= f.text_field :user_name %>
-    <br>
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-    <br>
+  <% if item.include?("nickname") %>
+    <div class="form-outline mb-2">
+      <%= f.label :Name, class: "form-label" %>
+      <%= f.text_field :name, class: "form-control border" %>
+    </div>
   <% end %>
-  <% if @user.new_record? %>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-    <br>
-    <%= f.label :password確認 %>
-    <%= f.password_field :password_confirmation %>
-    <br>
-  <% else %>
-    <%= f.label :ひとこと %>
-    <%= f.text_field :biography %>
+
+  <% if item.include?("username") %>
+    <div class="form-outline mb-2">
+      <%= f.label :Username, class: "form-label" %>
+      <div class="col-12">
+        <label class="visually-hidden" for="inlineFormInputGroupUsername">Username</label>
+        <div class="input-group">
+          <div class="input-group-text">@</div>
+          <%= f.text_field :user_name, class: "form-control border", id: "inlineFormInputGroupUsername" %>
+        </div>
+      </div>
+    </div>
   <% end %>
-  <%= f.submit yield(:button_text) %>
+
+  <% if item.include?("email") %>
+    <div class="form-outline mb-2">
+      <%= f.label :Email, class: "form-label" %>
+      <%= f.email_field :email, class: "form-control border", id: "email" %>
+    </div>
+  <% end %>
+
+  <% if item.include?("password") %>
+    <div class="form-outline mb-2">
+      <%= f.label :Password, class: "form-label" %>
+      <%= f.password_field :password, class: "form-control border", id: "password" %>
+    </div>
+  <% end %>
+
+  <% if item.include?("password-confirmination") %>
+    <div class="form-outline mb-2">
+      <%= f.label :"Password（確認）", class: "form-label" %>
+      <%= f.password_field :password_confirmination, class: "form-control border", id: "password_confirmination" %>
+    </div>
+  <% end %>
+
+  <% if item.include?("password-forgot") %>
+    <a href="<%= new_password_reset_url %>" class="text-yellow">Forgot password?</a>
+  <% end %>
+
+  <% if item.include?("bio") %>
+    <div class="form-outline mb-2">
+      <%= f.label :bio, class: "form-label" %>
+      <%= f.text_area :biography, class: "form-control border", id: "biography", style: "resize: none;" %>
+    </div>
+  <% end %>
+
+  <%= f.submit button_text, class: "btn btn-dark btn-rounded btn-block btn-yellow mt-4" %>
 <% end %>
 
 <script>

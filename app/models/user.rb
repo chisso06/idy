@@ -43,6 +43,14 @@ class User < ApplicationRecord
 
   validates :biography, length: { maximum: 150 }
 
+  def like_posts
+    like_posts = []
+    Like.where(user_id: self.id).order(:created_at).reverse.each do |like|
+      like_posts.push(like.post)
+    end
+    return like_posts
+  end
+
   # params[:id]
   def to_param
     user_name

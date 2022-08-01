@@ -1,0 +1,8 @@
+<div class="d-flex">
+	<p class="m-0 text-yellow"><i class="far fa-comment-alt text-yellow"></i> <%= post.comments.count %></p>
+	<% if @current_user %>
+		<%= render partial: 'likes/like', locals: { post: post, like: Like.find_by(user_id: @current_user.id, post_id: post.id), likes: post.likes } %>
+	<% else %>
+		<%= render partial: 'likes/like', locals: { post: post, like: nil, likes: post.likes } %>
+  <% end %>
+</div>

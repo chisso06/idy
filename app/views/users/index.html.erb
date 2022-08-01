@@ -1,5 +1,4 @@
-<% provide(:title, "ユーザー一覧") %>
+<% provide(:title, "Users") %>
+<h1>People</h1>
 
-<h1>ユーザー一覧</h1>
-
-<%= render 'layouts/users' %>
+<%= render partial: 'layouts/users', locals: { users: @users} %>
