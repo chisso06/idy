@@ -1,9 +1,35 @@
-<div>
-  <% @posts.each do |post| %>
-    <%= link_to("@" + post.user.user_name, user_path(post.user)) %>
-    <%= link_to(post.title, post_path(post)) %>
-    <%= post.content.slice(0..100) %>
-    <%= post.created_at %>
-    <br>
-  <% end %>
-</div>
+<% posts.each do |post| %>
+  <% user = post.user %>
+  <div class="container p-3 border-top-0" style="border: 1px solid #f1f3f5;">
+    <div class="d-flex">
+      <!-- user image -->
+      <div>
+        <a href="<%= user_path(user) %>" class="mx-2"><img src="/user_icons/<%= user.image %>" alt="icon" class="profile-icon small-icon"></a>
+      </div>
+      <!-- content -->
+      <div class="container p-0">
+        <div class="align-items-center">
+          <div class="d-flex align-items-center">
+            <a href="<%= user_path(user) %>" class="h6 text-dark me-1 p-0 m-0"><%= user.name %></a>
+            <a href="<%= user_path(user) %>" class="small text-muted me-1 p-0 m-0"><u>@<%= user.user_name %></u></a>
+          </div>
+          <div class="d-flex align-items-center">
+            <p class="small text-muted p-0 m-0"><%= post.created_at.strftime('%Y/%m/%d %H:%M:%S') %></p>
+            <%= render partial: 'posts/edit_option', locals: { post: post } %>
+          </div>
+        </div>
+        <div class="position-relative">
+          <% if @current_user %>
+            <a href="<%= post_path(post) %>" class="h5 a-yellow stretched-link"><%= post.title %></a>
+          <% else %>
+            <a class="h5 a-yellow stretched-link" data-mdb-toggle="modal" data-mdb-target="#signup" style="cursor:pointer;"><%= post.title %></a>
+          <% end %>
+          <p class="m-0"><small><%= post.content.slice(0..140) %>...</small></p>
+        </div>
+
+        <%= render partial: 'posts/post_footer', locals: { post: post } %>
+      </div>
+    </div>
+  </div>
+<% end %>
+

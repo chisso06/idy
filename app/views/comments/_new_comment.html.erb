@@ -1,0 +1,13 @@
+<%= form_with(url: post_comments_path(post), local: true) do |f| %>
+	<div class="d-flex my-3">
+		<div>
+			<a href="<%= user_path(@current_user) %>" class=""><img src="/user_icons/<%= @current_user.image %>" alt="icon" class="profile-icon small-icon"></a>
+		</div>
+		<div class="container row">
+			<%= f.text_area :content, class: "col-12 border-0 p-0", rows: "3", placeholder: "Comment", style: "outline:none; resize:none;" %>
+			<div class="d-flex flex-row-reverse p-0 pt-1">
+				<%= f.submit "コメントを追加", class: "btn btn-rounded btn-yellow" %>
+			</div>
+		</div>
+	</div>
+<% end %>

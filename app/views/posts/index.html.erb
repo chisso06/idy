@@ -1,4 +1,7 @@
 <% provide(:title, "みんなのアイデア") %>
-<h1>みんなのアイデア</h1>
 
-<%= render "layouts/posts" %>
+<% if @current_user %>
+	<%= render partial: 'posts/form', locals: { post: Post.new, url: posts_path, button_text: "投稿する！" } %>
+	<hr class="m-0 mt-2">
+<% end %>
+<%= render partial: 'layouts/posts', locals: { posts: @posts.reverse } %>

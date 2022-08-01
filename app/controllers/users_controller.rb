@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
   before_action :get_user,            only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show, :following, :followers]
   before_action :login_user,          only: [:logout, :edit, :update, :edit_email, :edit_email_form, :destroy_form, :destroy, :following, :followers]
-  before_action :not_login_user,      only: [:new, :create, :login_form, :login]
+  before_action :not_login_user,      only: [:create, :login]
   before_action :not_registered_user, only: [:create]
   before_action :valid_user,          only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show]
   before_action :correct_user,        only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy]
 
-  def new
-    @user = User.new
-  end
+  # def new
+  #   @user = User.new
+  # end
 
   def create
     @user = User.new(new_params)
@@ -24,36 +24,37 @@ class UsersController < ApplicationController
       redirect_to email_authentication_url(email: @user.new_email)
     else
       flash[:dangerous] = DEFECTIVE_CONTENT_MESSAGE
-      render "new"
+      render 'home/top'
     end
   end
 
-  def login_form
-  end
+  # def login_form
+  # end
 
   def login
-    if params[:email]
-      @user = User.find_by(email: params[:email].downcase)
-      @not_activated_user = User.find_by(new_email: params[:email].downcase)
+    if params[:user][:email]
+      @user = User.find_by(email: params[:user][:email].downcase)
+      @not_activated_user = User.find_by(new_email: params[:user][:email].downcase)
       if @not_activated_user && @not_activated_user.activated?
         @not_activated_user = nil
       end
     end
     # email-presence and correct-password
-    if @user && @user.authenticate(params[:password])
+    if @user && @user.authenticate(params[:user][:password])
       if @user.session_expired? # check valid session
         @user.create_session_token
       end
       session[:user_id] = @user.session_token
       flash[:notice] = WELCOME_MESSAGE
       redirect_to posts_url
-    elsif @user.nil? && @not_activated_user && @not_activated_user.authenticate(params[:password]) # not activated
-      flash[:dangerous] = EMAIL_AUTHENTICATION_MESSAGE
+    elsif @user.nil? && @not_activated_user && @not_activated_user.authenticate(params[:user][:password]) # not activated
       @not_activated_user.restart_activation
+      flash[:dangerous] = EMAIL_AUTHENTICATION_MESSAGE
       redirect_to email_authentication_url(email: @not_activated_user.new_email)
     else
+      @user = User.new(login_params)
       flash[:dangerous] = WRONG_LOGIN_MESSAGE
-      render "login_form"
+      render 'home/top'
     end
   end
 
@@ -76,7 +77,9 @@ class UsersController < ApplicationController
       redirect_to user_url(@user)
     else
       flash[:dangerous] = CANNOT_SAVE_MESSAGE
-      render "edit"
+      @posts = Post.where(user_id: @user.id).order(:created_at).reverse
+      @like_posts = @user.like_posts
+      render 'users/show'
     end
   end
 
@@ -86,7 +89,7 @@ class UsersController < ApplicationController
   def edit_email
     if params[:email] && @user.authenticate(params[:password])
       if @user.email == params[:email].downcase # registered-email
-        flash[:dangerous] = REGISTERD_EMAIL_MESSAGE
+        flash[:dangerous] = REGISTERED_EMAIL_MESSAGE
         render 'edit_email_form'
       else # non registered-email
         @user.new_email = params[:email].downcase
@@ -120,31 +123,35 @@ class UsersController < ApplicationController
   end
 
   def show
-    @posts = Post.where(user_id: @user.id)
-    @likes = Like.where(user_id: @user.id)
+    @posts = Post.where(user_id: @user.id).order(:created_at).reverse
+    @like_posts = @user.like_posts
   end
 
-  def index
-    @users = User.all
-  end
+  # def index
+  #   @users = User.all
+  # end
 
-  def following
-    @title = "Following"
-    @users = @user.following
-    render 'show_follow'
-  end
+  # def following
+  #   @title = "Following"
+  #   @users = @user.following
+  #   render 'show_follow'
+  # end
 
-  def followers
-    @title = "Followers"
-    @users = @user.followers
-    render 'show_follow'
-  end
+  # def followers
+  #   @title = "Followers"
+  #   @users = @user.followers
+  #   render 'show_follow'
+  # end
 
   private
 
     # params
     def new_params
       params.require(:user).permit(:name, :user_name, :password, :password_confirmation)
+    end
+
+    def login_params
+      params.require(:user).permit(:email, :password)
     end
 
     def edit_params
@@ -162,7 +169,7 @@ class UsersController < ApplicationController
     def login_user
       if @current_user.nil?
         flash[:dangerous] = NEED_LOGIN_MESSAGE
-        redirect_to login_path
+        redirect_to root_path
       end
     end
 
@@ -181,8 +188,8 @@ class UsersController < ApplicationController
         end
       end
       if @registered_user
-        flash[:dangerous] = REGISTERD_EMAIL_MESSAGE
-        redirect_to login_path
+        flash[:dangerous] = REGISTERED_EMAIL_MESSAGE
+        redirect_to root_path
       end
     end
 

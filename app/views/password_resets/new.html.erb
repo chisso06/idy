@@ -1,9 +1,13 @@
 <% provide(:title, "Forgot Password") %>
-<h1>パスワード再設定</h1>
 
-<%= form_with(url: password_resets_path, local: true) do |f| %>
-	<%= f.label :メールアドレス %>
-	<%= f.text_field :email %>
-
-	<%= f.submit "次へ" %>
-<% end %>
+<div class="container">
+	<h4>登録されているメールアドレスを入力してください</h4>
+	<div class="col-12 col-sm-10 col-lg-7 col-xl-6 mt-4">
+		<%= form_with(url: password_resets_path, local: true) do |f| %>
+			<div class="form-outline mb-2">
+				<%= f.text_field :email, class: "form-control border" %>
+			</div>
+			<%= f.submit "次へ", class: "col-12 btn btn-yellow mb-3" %>
+		<% end %>
+	</div>
+</div>

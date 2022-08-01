@@ -1,0 +1,41 @@
+<div class="modal fade" id="<%= id %>" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+				<% if id == "signup" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">Sign Up</h5>
+				<% elsif id == "login" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">Login</h5>
+				<% elsif id == "setting" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">Setting</h5>
+				<% elsif id == "like_users" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">Liked by</h5>
+				<% elsif id == "following" || id == "followers" %>
+					<h5 class="modal-title ms-5" id="myModalLabel"><%= title %></h5>
+				<% elsif id == "new_post" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">New Idea</h5>
+				<% elsif id == "edit_post" %>
+					<h5 class="modal-title ms-5" id="myModalLabel">Edit Post</h5>
+				<% end %>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+				<% if id == "signup" %>
+					<%= render partial: 'users/new', locals: { user: user } %>
+				<% elsif id == "login" %>
+					<%= render partial: 'users/login_form', locals: { user: user } %>
+				<% elsif id == "setting" %>
+					<%= render partial: 'users/edit', locals: { user: user } %>
+				<% elsif id == "like_users" %>
+					<%= render partial: 'layouts/users', locals: { users: users, null_message: null_message } %>
+				<% elsif id == "following" || id == "followers" %>
+					<%= render partial: 'layouts/users', locals: { users: users, title: title, null_message: null_message } %>
+				<% elsif id == "new_post" %>
+					<%= render partial: 'posts/new' %>
+				<% elsif id == "edit_post" %>
+					<%= render partial: 'posts/edit', locals: { post: post } %>
+				<% end %>
+			</div>
+    </div>
+  </div>
+</div>

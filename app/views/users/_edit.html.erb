@@ -1,0 +1,8 @@
+<div class="container col-10 mb-3">
+	<%= render partial: 'users/form', locals: { url: user_path(user), button_text: "Update", item: ["image", "nickname", "bio"], user: user } %>
+  <hr>
+  <div class="d-flex justify-content-center">
+    <%= link_to "メールアドレス変更", "/edit_email/#{user.user_name}", { class: "btn btn-rounded btn-outline-yellow me-2" } %>
+    <%= button_to "Logout", logout_path, { method: :post, class: "btn btn-rounded btn-outline-yellow" } %>
+  </div>
+</div>

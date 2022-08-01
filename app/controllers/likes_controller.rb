@@ -16,16 +16,16 @@ class LikesController < ApplicationController
 		redirect_back(fallback_location: post_path(@post))
 	end
 
-	def index
-		@users = @post.like_users
-	end
+	# def index
+	# 	@users = @post.like_users
+	# end
 
 	private
 
 		def login_user
 			if @current_user.nil?
 				flash[:dangerous] = NEED_LOGIN_MESSAGE
-				redirect_to login_url
+				redirect_to root_url
 			end
 		end
 

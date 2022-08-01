@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   NEED_LOGIN_MESSAGE					 = "ログインしてください"
   DEFECTIVE_CONTENT_MESSAGE		 = "内容に不備があります"
 	NOT_REGISTERED_EMAIL_MESSAGE = "このメールアドレスは登録されていません"
-	FAIL_AUTHENTICATE_MESSAGE		 = "認証に失敗しました。はじめからやり直してください。"
+	FAIL_AUTHENTICATE_MESSAGE		 = "認証に失敗しました。"
   NOT_EXIST_USER_MESSAGE			 = "このユーザーは存在しません"
 	NOT_EXIST_POST_MESSAGE			 = "この投稿は存在しません"
 
@@ -43,10 +43,12 @@ class ApplicationController < ActionController::Base
 			if user.nil? || user.session_expired?
 				flash[:dangerous] = NEED_LOGIN_AGAIN_MESSAGE
 				session[:user_id] = nil
-				redirect_to login_path
+				redirect_to root_url
 			else
 				@current_user = user
 			end
+		else
+			@current_user = nil
 		end
 	end
 end

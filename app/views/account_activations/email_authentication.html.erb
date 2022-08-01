@@ -1,7 +1,9 @@
 <% provide(:title, "メール認証画面") %>
-<h1>メールアドレス認証</h1>
 
-<p>以下のメールアドレスに認証メールを送信しました。</p>
-<p><%= @user.new_email %></p>
-<p>メール内の認証リンクにアクセスすると、メールアドレスの認証が完了します</p>
-<%= link_to("認証メールをもう一度送信する", send_email_again_path(email: @user.new_email)) %>
+<div class="container">
+	<h4>メールアドレス認証</h4>
+	<p>以下のメールアドレスに認証メールを送信しました。</p>
+	<p class="border rounded p-1"><%= @user.new_email %></p>
+	<p>メール内の認証リンクにアクセスすると、メールアドレスの認証が完了します。</p>
+	<%= link_to("認証メールをもう一度送信する", send_email_again_path(email: @user.new_email), { class: "a-yellow" }) %>
+</div>

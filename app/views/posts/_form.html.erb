@@ -1,9 +1,15 @@
-<%= form_with(model: @post, local: true) do |f| %>
-  <%= f.label :title, "アイデアを一言でいうと" %>
-  <%= f.text_field :title %>
-  <br>
-  <%= f.label :content, "アイデアの内容" %>
-  <%= f.text_field :content %>
-  <br>
-  <%= f.submit yield(:button_text) %>
+<%= form_with(url: url, model: post, local: true) do |f| %>
+  <div class="d-flex">
+    <div>
+      <a href="<%= user_path(@current_user) %>" class="mx-2"><img src="/user_icons/<%= @current_user.image %>" alt="icon" class="profile-icon small-icon"></a>
+    </div>
+    <div class="container p-2">
+      <%= f.text_field :title, class: "col-12 border-0 p-0", style: "outline:none;", placeholder: "タイトル" %>
+      <hr class="my-2">
+      <%= f.text_area :content, class: "col-12 border-0 p-0", rows: "3", style: "outline:none; resize:none;", placeholder: "アイデアの内容" %>
+      <div class="d-flex flex-row-reverse p-0 pt-1">
+        <%= f.submit button_text, class: "btn btn-rounded btn-yellow" %>
+      </div>
+    </div>
+  </div>
 <% end %>

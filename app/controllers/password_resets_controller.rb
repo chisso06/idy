@@ -15,7 +15,7 @@ class PasswordResetsController < ApplicationController
     @user.save
     @user.send_password_reset_email
     flash[:notice] = SEND_PASSWORD_RESET_EMAIL_MESSAGE
-    redirect_to login_url
+    redirect_to root_url
   end
 
   def edit
@@ -29,7 +29,7 @@ class PasswordResetsController < ApplicationController
       flash[:notice] = UPDATE_PASSWORD_MESSAGE_MESSAGE
       @user.reset_digest = nil
       @user.reset_sent_at = nil
-      redirect_to login_url
+      redirect_to root_url
     else
       flash[:dangerous] = DEFECTIVE_CONTENT_MESSAGE
       render 'edit'

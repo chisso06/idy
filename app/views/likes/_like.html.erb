@@ -1,6 +1,14 @@
-<%= link_to("いいねしたユーザー", post_likes_path(@post)) %>
-<% if @like.nil? %>
-	<p>いいねする</p><%= button_to(@likes.count, post_likes_path(@post), method: :post) %>
-<% else %>
-	<p>いいねを取り消す</p><%= button_to(@likes.count, post_like_path(@post, @like), method: :delete) %>
+<div class="d-flex">
+	<% if !@current_user %>
+		<button class="border-0 bg-transparent far fa-heart text-yellow" data-mdb-toggle="modal" data-mdb-target="#signup"></button>
+	<% elsif like.nil? %>
+		<%= button_to "", post_likes_path(post), { method: :post, class: "border-0 bg-transparent far fa-heart text-yellow" } %>
+	<% else %>
+		<%= button_to "", post_like_path(post, like), { method: :delete, class: "border-0 bg-transparent fas fa-heart text-yellow" } %>
+	<% end %>
+	<a href="" class="a-yellow" data-mdb-toggle="modal" data-mdb-target="#like_users" ><%= likes.count %></a>
+</div>
+
+<% if @current_user %>
+	<%= render partial: 'home/modal', locals: { id: "like_users", users: post.like_users, null_message: "この投稿にいいねしたユーザーはまだいません"} %>
 <% end %>

@@ -25,7 +25,7 @@ class AccountActivationsController < ApplicationController
 			# ログイン
 			flash[:notice] = COMPLETE_EMAIL_AUTHENTICATION_MESSAGE
 			if session[:user_id].nil?
-				redirect_to login_url
+				redirect_to root_url
 			else
 				redirect_to posts_url
 			end
@@ -55,7 +55,7 @@ class AccountActivationsController < ApplicationController
 						if @current_user
 							redirect_to posts_url
 						else
-							redirect_to login_url
+							redirect_to root_url
 						end
 					else
 						flash[:dangerous] = UNEXPECTED_ERROR_MESSAGE

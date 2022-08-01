@@ -1,34 +1,35 @@
 class PostsController < ApplicationController
 
-  before_action :login_user, only: [:new, :create, :edit, :update, :destroy, :show]
-  before_action :correct_user, only: [:edit, :update, :destroy]
-  before_action :get_post, only: [:edit, :update, :destroy, :show]
+  before_action :login_user, only: [:create, :update, :destroy, :show, :index]
+  before_action :correct_user, only: [:update, :destroy]
+  before_action :get_post, only: [:update, :destroy, :show]
 
-  def new
-    @post = Post.new
-  end
+  # def new
+  #   @post = Post.new
+  # end
 
   def create
     @post = Post.new(post_params)
     @post.user_id = @current_user.id
     if @post.save
       flash[:notice] = SUCCESSFUL_POST_MESSAGE
-      redirect_to post_url(@post)
+		  redirect_back(fallback_location: posts_path)
     else
-      render "new"
+      @posts = Post.all
+      render 'posts/index'
     end
   end
 
-  def edit
-  end
+  # def edit
+  # end
 
   def update
     if @post.update(post_params)
-      flash[:notice] = SAVE_MESSAGE
-      redirect_to post_url(@post)
+		  redirect_back(fallback_location: post_path(@post))
     else
       flash[:dangerous] = CANNOT_SAVE_MESSAGE
-      render "edit"
+      @posts = Post.all
+      render 'posts/index'
     end
   end
 
@@ -39,8 +40,6 @@ class PostsController < ApplicationController
   end
 
   def show
-    @like = Like.find_by(user_id: @current_user.id, post_id: params[:id])
-    @likes = Like.where(post_id: params[:id])
     @comment = Comment.new
     @comments = Comment.where(post_id: params[:id])
   end
@@ -58,7 +57,7 @@ class PostsController < ApplicationController
     def login_user
       if @current_user.nil?
         flash[:dangerous] = NEED_LOGIN_MESSAGE
-        redirect_to login_url
+        redirect_to root_url
       end
     end
 
