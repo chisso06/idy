@@ -1,0 +1,26 @@
+<div class="accordion-item">
+	<h2 class="accordion-header" id="heading<%= i %>">
+		<button
+			class="accordion-button collapsed"
+			type="button"
+			data-mdb-toggle="collapse"
+			data-mdb-target="#collapse<%= i %>"
+			aria-expanded="false"
+			aria-controls="collapse<%= i %>"
+		>
+			<%= title %>
+		</button>
+	</h2>
+	<div id="collapse<%= i %>" class="accordion-collapse collapse" aria-labelledby="heading<%= i %>" data-mdb-parent="#myAccordion">
+		<div class="accordion-body">
+			<%= text %>
+			<% if i == 1 %>
+				<% if @current_user %>
+					<a href="/destroy/<%= @current_user.user_name %>" class="a-yellow">こちら</a> よりお手続きを行なってください。
+				<% else %>
+					<a href="/destroy/0" class="a-yellow">こちら</a> よりお手続きを行なってください。
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+</div>

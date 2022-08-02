@@ -1,8 +1,4 @@
 <%= form_with(url: url, model: user, local: true) do |f| %>
-  <% if user.errors.any? %>
-    <p>error!</p>
-  <% end %>
-
   <% if item.include?("image") %>
     <div class="form-outline mb-2">
       <p class="m-0"><%= f.label :"Profile Image", class: "form-label" %></p>

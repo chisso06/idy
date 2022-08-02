@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'home#top'
 
+  get '/help'                 => "home#help"
+
   get "/email_authentication" => "account_activations#email_authentication"
   get "/send_email_again"     => "account_activations#send_email_again"
 
