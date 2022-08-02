@@ -1,9 +1,14 @@
 require "active_support/core_ext/integer/time"
 
-ADDRESS   = 'smtp.muumuu-mail.com'
-DOMAIN    = 'idy-new.com'
+# ADDRESS   = 'smtp.muumuu-mail.com'
+# DOMAIN    = 'idy-new.com'
+# USER_NAME = 'milia4364@gmail.com'
+# PASSWORD  = 'miliam77m77'
+
+ADDRESS   = 'smtp.gmail.com'
+DOMAIN    = 'gmail.com'
+PASSWORD  = 'qyirlaolwscfaggx'
 USER_NAME = 'milia4364@gmail.com'
-PASSWORD  = 'miliam77m77'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
