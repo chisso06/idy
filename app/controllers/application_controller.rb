@@ -20,9 +20,9 @@ class ApplicationController < ActionController::Base
 	# users
   WRONG_LOGIN_MESSAGE			 = "メールアドレスもしくはパスワードが間違っています"
   WRONG_PASSWORD_MESSAGE	 = "パスワードが間違っています"
-  WELCOME_MESSAGE					 = "iDYにようこそ！"
+  WELCOME_MESSAGE					 = "idyへようこそ！"
   REGISTERED_EMAIL_MESSAGE = "このメールアドレスはすでに登録されています"
-  WITHDRAWAL_MESSAGE			 = "退会が完了しました"
+  WITHDRAWAL_MESSAGE			 = "アカウントを削除しました"
   ALREADY_LOGIN_MASSAGE		 = "すでにログインしています"
 
 	# account_activations

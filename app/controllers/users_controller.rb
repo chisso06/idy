@@ -86,7 +86,7 @@ class UsersController < ApplicationController
 
   def edit_email
     if params[:email] && @user.authenticate(params[:password])
-      if @user.email == params[:email].downcase # registered-email
+      if User.find_by(email: params[:email].downcase) # registered-email
         flash[:dangerous] = REGISTERED_EMAIL_MESSAGE
         render 'edit_email_form'
       else # non registered-email
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
       end
     else
       flash[:dangerous] = DEFECTIVE_CONTENT_MESSAGE
-      render "edit_email_form"
+      render 'edit_email_form'
     end
   end
 
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
     else
       @reason = params[:reason]
       flash[:dangerous] = WRONG_PASSWORD_MESSAGE
-      render 'destroy_form'
+      redirect_back(fallback_location: @user)
     end
   end
 

@@ -1,5 +1,10 @@
 require "active_support/core_ext/integer/time"
 
+ADDRESS   = 'smtp.muumuu-mail.com'
+DOMAIN    = 'idy-new.com'
+USER_NAME = 'milia4364@gmail.com'
+PASSWORD  = 'miliam77m77'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -13,7 +18,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -61,6 +66,17 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "idy_production"
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    port: 587,
+    address: ADDRESS,
+    user_name: USER_NAME,
+    password: PASSWORD,
+    domain: DOMAIN,
+    authentication: :login,
+  }
 
   config.action_mailer.perform_caching = false
 
