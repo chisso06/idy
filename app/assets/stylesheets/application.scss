@@ -43,6 +43,13 @@ $yellow: #e4aa00;
 	}
 }
 
+.hover-underline {
+	&:hover {
+		color:$yellow;
+		text-decoration: underline;
+	}
+}
+
 .btn-yellow {
 	color: white;
 	background-color: $yellow;
