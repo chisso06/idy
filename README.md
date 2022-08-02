@@ -28,6 +28,8 @@ Ruby on Rails 他
   - トップページ
   - ヘルプページ
 
+※トップページ以外のページの右側に存在する四角い枠は広告を入れる場所です。
+
 <img width="1440" alt="00" src="https://user-images.githubusercontent.com/90566820/182415006-6a5380fb-7b96-4ce9-a3d7-02eca36a885a.png">
 <img width="1440" alt="01" src="https://user-images.githubusercontent.com/90566820/182415023-a36c084b-db48-42be-9b5f-2643ee3ca61a.png">
 <img width="1440" alt="02" src="https://user-images.githubusercontent.com/90566820/182415031-5e1f4189-6911-41c0-965c-b98dbc5a1fb6.png">
