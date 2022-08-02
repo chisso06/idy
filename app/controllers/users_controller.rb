@@ -20,11 +20,10 @@ class UsersController < ApplicationController
     if @user.save
       @user.create_activation_token_and_digest
       @user.send_activation_email
-      flash[:notice] = EMAIL_AUTHENTICATION_MESSAGE
       redirect_to email_authentication_url(email: @user.new_email)
     else
       flash[:dangerous] = DEFECTIVE_CONTENT_MESSAGE
-      render 'home/top'
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -49,12 +48,11 @@ class UsersController < ApplicationController
       redirect_to posts_url
     elsif @user.nil? && @not_activated_user && @not_activated_user.authenticate(params[:user][:password]) # not activated
       @not_activated_user.restart_activation
-      flash[:dangerous] = EMAIL_AUTHENTICATION_MESSAGE
       redirect_to email_authentication_url(email: @not_activated_user.new_email)
     else
       @user = User.new(login_params)
       flash[:dangerous] = WRONG_LOGIN_MESSAGE
-      render 'home/top'
+      redirect_back(fallback_location: root_path)
     end
   end
 
@@ -79,7 +77,7 @@ class UsersController < ApplicationController
       flash[:dangerous] = CANNOT_SAVE_MESSAGE
       @posts = Post.where(user_id: @user.id).order(:created_at).reverse
       @like_posts = @user.like_posts
-      render 'users/show'
+      redirect_back(fallback_location: user_path(@user))
     end
   end
 
@@ -118,7 +116,7 @@ class UsersController < ApplicationController
     else
       @reason = params[:reason]
       flash[:dangerous] = WRONG_PASSWORD_MESSAGE
-      render "destroy_form"
+      render 'destroy_form'
     end
   end
 

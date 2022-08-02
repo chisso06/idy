@@ -13,8 +13,8 @@ Rails.application.routes.draw do
   post "/edit_email/:id"      => "users#edit_email"
   get "/destroy/:id"          => "users#destroy_form"
 
-  resources :users, expect: [:new, :edit, :index]
-  resources :posts, expect: [:new, :edit] do
+  resources :users, except: [:new, :edit, :index]
+  resources :posts, except: [:new, :edit] do
     resources :likes,             only: [:create, :destroy]
     resources :comments,          only: [:create, :destroy]
   end
@@ -22,5 +22,7 @@ Rails.application.routes.draw do
   resources :password_resets,     only: [:new, :create, :edit, :update]
   resources :relationships,       only: [:create, :destroy]
 
-  get '*path' => 'home#top'
+  if Rails.env.production?
+    match "*path" , to: redirect('/'), via: 'get'
+  end
 end
