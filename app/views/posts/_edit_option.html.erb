@@ -1,18 +1,18 @@
 <% if @current_user && post.user.id == @current_user.id %>
-<div class="ms-2" style="width:25px; height:25px;">
-	<div class="btn-default d-flex align-items-center justify-content-center rounded-circle"
-		type="button"
-		id="dropdownMenuButton"
-		data-mdb-toggle="dropdown"
-		aria-expanded="false"
-		style="width:25px; height:25px; background-color:#eeeeee;">
-		<i class="fas fa-ellipsis-v"></i>
+	<div class="ms-auto">
+		<div class="btn-default d-flex align-items-center justify-content-center rounded-circle"
+			type="button"
+			id="dropdownMenuButton"
+			data-mdb-toggle="dropdown"
+			aria-expanded="false"
+			style="width:25px; height:25px; background-color:#eeeeee;">
+			<i class="fas fa-ellipsis-v"></i>
+		</div>
+		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			<li><a class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#edit_post">編集</a></li>
+			<li><%= button_to("削除", post_path(post), { method: :delete, class: "dropdown-item" }) %></li>
+		</ul>
 	</div>
-	<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		<li><a class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#edit_post">編集</a></li>
-		<li><%= button_to("削除", post_path(post), { method: :delete, class: "dropdown-item" }) %></li>
-	</ul>
-</div>
 <% end %>
 
 <% if @current_user %>

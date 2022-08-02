@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :get_user,            only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show, :following, :followers]
   before_action :login_user,          only: [:logout, :edit, :update, :edit_email, :edit_email_form, :destroy_form, :destroy, :following, :followers]
+  before_action :get_user,            only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show, :following, :followers]
   before_action :not_login_user,      only: [:create, :login]
   before_action :not_registered_user, only: [:create]
   before_action :valid_user,          only: [:edit, :update, :edit_email_form, :edit_email, :destroy_form, :destroy, :show]

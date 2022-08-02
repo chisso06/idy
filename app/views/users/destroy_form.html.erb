@@ -1,12 +1,39 @@
 <% provide(:title, "退会ページ") %>
-<h1>退会ページ</h1>
-<%= form_with(url: user_path(@user), local: true) do |f| %>
-	<%= f.label :退会理由を教えてください %>
-	<%= f.text_field :reason %>
-	<p><%= @reason %></p>
-	<%= f.label :パスワード %>
-	<%= f.password_field :password %>
-	<br>
-	<input type="hidden", name="_method", value="DELETE">
-	<%= f.submit "退会する" %>
-<% end %>
+
+<div class="container">
+	<h4>アカウント削除</h4>
+	<%= form_with(url: user_path(@user), local: true) do |f| %>
+		<div class="col-12 mt-4">
+			<div class="form-outline mb-2">
+				<%= f.label :理由を教えてください, class: "form-label" %>
+				<%= f.text_area :reason, class: "form-control border" %>
+			</div>
+			<div class="form-outline mb-2">
+				<%= f.label :パスワード, class: "form-label" %>
+				<%= f.password_field :password, class: "form-control border" %>
+				<input type="hidden", name="_method", value="DELETE">
+				<button type="button" class="col-12 btn btn-yellow my-3" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+					アカウントを削除する
+				</button>
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title ms-5" id="exampleModalLabel">確認</h5>
+								<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body d-flex align-items-center justify-content-center">
+								<p class="m-0">本当にアカウントを削除しますか？<p>
+								<p class="m-0">一度削除すると、二度と復元することはできません。<p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-muted" data-mdb-dismiss="modal">Back</button>
+								<%= f.submit :削除する, class: "btn btn-danger" %>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<% end %>
+</div>
