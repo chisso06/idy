@@ -1,5 +1,10 @@
 require "active_support/core_ext/integer/time"
 
+ADDRESS   = 'smtp.gmail.com'
+DOMAIN    = 'gmail.com'
+USER_NAME = 'milia4364@gmail.com'
+PASSWORD  = 'qyirlaolwscfaggx'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -42,10 +47,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
   config.action_mailer.smtp_settings = {
     port: 587,
-    address: 'smtp.gmail.com',
-    user_name: 'milia4364@gmail.com',
-    password: 'qyirlaolwscfaggx',
-    domain: 'gmail.com',
+    address: ADDRESS,
+    user_name: USER_NAME,
+    password: PASSWORD,
+    domain: DOMAIN,
     authentication: :login,
   }
 
