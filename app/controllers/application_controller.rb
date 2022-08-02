@@ -15,15 +15,15 @@ class ApplicationController < ActionController::Base
 
 	# application
 	NEED_LOGIN_AGAIN_MESSAGE = "ログインし直してください"
+	SEND_EMAIL_MESSAGE			 = "認証メールを送信しました"
 
 	# users
-	EMAIL_AUTHENTICATION_MESSAGE = "メールアドレスの認証を行います。"
-  WRONG_LOGIN_MESSAGE					 = "メールアドレスもしくはパスワードが間違っています"
-  WRONG_PASSWORD_MESSAGE			 = "パスワードが間違っています"
-  WELCOME_MESSAGE							 = "iDYにようこそ！"
-  REGISTERED_EMAIL_MESSAGE		 = "このメールアドレスはすでに登録されています"
-  WITHDRAWAL_MESSAGE					 = "退会が完了しました"
-  ALREADY_LOGIN_MASSAGE				 = "すでにログインしています"
+  WRONG_LOGIN_MESSAGE			 = "メールアドレスもしくはパスワードが間違っています"
+  WRONG_PASSWORD_MESSAGE	 = "パスワードが間違っています"
+  WELCOME_MESSAGE					 = "iDYにようこそ！"
+  REGISTERED_EMAIL_MESSAGE = "このメールアドレスはすでに登録されています"
+  WITHDRAWAL_MESSAGE			 = "退会が完了しました"
+  ALREADY_LOGIN_MASSAGE		 = "すでにログインしています"
 
 	# account_activations
 	COMPLETE_EMAIL_AUTHENTICATION_MESSAGE = "メールアドレスの認証が完了しました"

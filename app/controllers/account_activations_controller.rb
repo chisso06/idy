@@ -9,6 +9,7 @@ class AccountActivationsController < ApplicationController
 
 	def send_email_again
 		@user.restart_activation
+		flash[:notice] = SEND_EMAIL_MESSAGE
 		redirect_to email_authentication_url(email: @user.new_email)
 	end
 
@@ -24,11 +25,8 @@ class AccountActivationsController < ApplicationController
 			@user.save
 			# ログイン
 			flash[:notice] = COMPLETE_EMAIL_AUTHENTICATION_MESSAGE
-			if session[:user_id].nil?
-				redirect_to root_url
-			else
-				redirect_to posts_url
-			end
+			session[:user_id] = nil
+			redirect_to root_url
 		else
 			flash[:dangerous] = FAIL_AUTHENTICATE_MESSAGE
 			redirect_to send_email_again_url(email: @user.new_email)

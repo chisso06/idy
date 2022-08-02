@@ -1,7 +1,5 @@
-<p><%= @user.name %> さん、Idy へようこそ！</p>
+<p><%= @user.name %> さん、idy へようこそ！</p>
 <p>あなたのメールアドレスで、認証を試みようとしています。</p>
 <p>以下のボタンから、メールアドレスの認証をしてください</p>
 <p><%= link_to("認証を完了する", edit_account_activation_url(@user.activation_token, email: @user.new_email)) %></p>
 <p>もし心当たりがない場合は、お手数ですが、このメールを廃棄してください。</p>
-
-<p><%= link_to("ヘルプ", "#") %></p>

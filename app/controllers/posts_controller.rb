@@ -16,7 +16,7 @@ class PostsController < ApplicationController
 		  redirect_back(fallback_location: posts_path)
     else
       @posts = Post.all
-      render 'posts/index'
+      redirect_back(fallback_location: posts_path)
     end
   end
 
@@ -29,7 +29,7 @@ class PostsController < ApplicationController
     else
       flash[:dangerous] = CANNOT_SAVE_MESSAGE
       @posts = Post.all
-      render 'posts/index'
+		  redirect_back(fallback_location: post_path(@post))
     end
   end
 

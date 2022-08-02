@@ -1,4 +1,4 @@
-<%= @user.name %> さん、Idy へようこそ！
+<%= @user.name %> さん、idy へようこそ！
 
 あなたのメールアドレスで、認証を試みようとしています。
 以下のリンクから、メールアドレスの認証をしてください。
@@ -6,5 +6,3 @@
 <%= edit_account_activation_url(@user.activation_token, email: @user.new_email) %>
 
 もし心当たりがない場合は、お手数ですが、このメールを廃棄してください。
-
-ヘルプ：<%= "#" %>
