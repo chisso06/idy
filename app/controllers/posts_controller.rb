@@ -1,9 +1,9 @@
 class PostsController < ApplicationController
 
   before_action :login_user, only: [:create, :update, :destroy, :show, :index]
-  before_action :correct_user, only: [:update, :destroy]
   before_action :get_post, only: [:update, :destroy, :show]
-
+  before_action :correct_user, only: [:update, :destroy]
+  
   # def new
   #   @post = Post.new
   # end
@@ -13,7 +13,7 @@ class PostsController < ApplicationController
     @post.user_id = @current_user.id
     if @post.save
       flash[:notice] = SUCCESSFUL_POST_MESSAGE
-		  redirect_back(fallback_location: posts_path)
+		  redirect_back(fallback_location: post_path(@post))
     else
       @posts = Post.all
       redirect_back(fallback_location: posts_path)
@@ -45,7 +45,6 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts = Post.all
   end
 
   private
@@ -61,19 +60,18 @@ class PostsController < ApplicationController
       end
     end
 
-    def correct_user
-      post = Post.find_by(id: params[:id])
-      if post.user_id != @current_user.id && !@current_user.admin?
-        flash[:dangerous] = NO_AUTHORITY_MESSAGE
-        redirect_back(fallback_location: posts_path)
-      end
-    end
-
     def get_post
       @post = Post.find_by(id: params[:id])
       if @post.nil?
         flash[:notice] = NOT_EXIST_POST_MESSAGE
         redirect_back(fallback_location: posts_path)
+      end
+    end
+
+    def correct_user
+      if @post.user_id != @current_user.id && !@current_user.admin?
+        flash[:dangerous] = NO_AUTHORITY_MESSAGE
+        redirect_back(fallback_location: post_path(@post))
       end
     end
 end
