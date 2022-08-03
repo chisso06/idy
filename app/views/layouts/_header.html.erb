@@ -16,20 +16,23 @@
         <a class="text-light h4 ms-3 me-3" href="<%= root_path %>">idy</a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="nav navbar-nav d-flex align-items-center me-auto mb-2 mb-lg-0">
           <% if @current_user.nil? %>
             <li class="nav-item">
-              <a class="nav-link text-white" href="<%= root_path %>" data-mdb-toggle="modal" data-mdb-target="#signup">新規登録</a>
+              <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#signup">新規登録</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="<%= root_path %>" data-mdb-toggle="modal" data-mdb-target="#login">ログイン</a>
+              <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#login">ログイン</a>
             </li>
           <% else %>
             <li class="nav-item">
-              <a class="nav-link text-white" href="<%= user_path(@current_user) %>">MyPage</a>
+              <a class="nav-link text-white" href="<%= user_url(@current_user) %>">MyPage</a>
             </li>
             <li class="nav-item">
-				      <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#new_post" style="cursor:pointer;"><strong>ひらめいた！</strong></a>
+				      <a class="nav-link text-white hover-pointer" data-mdb-toggle="modal" data-mdb-target="#new_post"><strong>ひらめいた！</strong></a>
+            </li>
+            <li class="nav-item">
+              <%= render partial: 'layouts/search_form', locals: { q: @q, url: posts_path } %>
             </li>
           <% end %>
         </ul>

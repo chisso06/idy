@@ -114,4 +114,10 @@ body {
 	transform: rotate(-180deg);
 }
 
+.hover-pointer {
+ &:hover {
+	cursor: pointer;
+ }
+}
+
 }

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
 	before_action :current_user
+	before_action :set_search
 
 	UNEXPECTED_ERROR_MESSAGE		 = "予期せぬエラーが発生しました"
   NO_AUTHORITY_MESSAGE				 = "権限がありません"
@@ -51,4 +52,22 @@ class ApplicationController < ActionController::Base
 			@current_user = nil
 		end
 	end
+
+	def set_search
+    @q = Post.ransack(params[:q])
+    @search_posts = @q.result(distinct: true)
+    @search_following_posts = following_posts(@q.result(distinct: true))
+  end
+
+	private
+
+		def following_posts(posts)
+			following_posts = []
+			posts.each do |p|
+				if @current_user == p.user || @current_user.following?(p.user)
+					following_posts.push(p)
+				end
+			end
+			return following_posts
+		end
 end
