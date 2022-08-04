@@ -54,9 +54,11 @@ class ApplicationController < ActionController::Base
 	end
 
 	def set_search
-    @q = Post.ransack(params[:q])
-    @search_posts = @q.result(distinct: true)
-    @search_following_posts = following_posts(@q.result(distinct: true))
+		if @current_user
+			@q = Post.ransack(params[:q])
+			@search_posts = @q.result(distinct: true)
+			@search_following_posts = following_posts(@q.result(distinct: true))
+		end
   end
 
 	private

@@ -16,7 +16,7 @@
         <a class="text-light h4 ms-3 me-3" href="<%= root_path %>">idy</a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav d-flex align-items-center me-auto mb-2 mb-lg-0">
+        <ul class="nav navbar-nav d-flex align-items-center mb-2 mb-lg-0">
           <% if @current_user.nil? %>
             <li class="nav-item">
               <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#signup">新規登録</a>
@@ -31,11 +31,16 @@
             <li class="nav-item">
 				      <a class="nav-link text-white hover-pointer" data-mdb-toggle="modal" data-mdb-target="#new_post"><strong>ひらめいた！</strong></a>
             </li>
-            <li class="nav-item">
-              <%= render partial: 'layouts/search_form', locals: { q: @q, url: posts_path } %>
-            </li>
           <% end %>
         </ul>
+        <% if @current_user.nil? && current_page?(root_path) %>
+          <div class="form-outline">
+            <input type="search" class="form-control rounded bg-light" data-mdb-toggle="modal" data-mdb-target="#signup" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
+          </div>
+        <% end %>
+        <% if @current_user && current_page?(posts_path) %>
+          <%= render partial: 'layouts/search_form', locals: { q: @q, url: posts_path } %>
+        <% end %>
       </div>
     </div>
   </nav>
