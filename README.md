@@ -25,17 +25,19 @@ Ruby on Rails 他
   - 投稿詳細ページ
   - いいね
   - コメント
+  - 検索
 - その他
   - トップページ
   - ヘルプページ
 
 ※トップページ以外のページの右側に存在する四角い枠は広告を入れる場所です。
-
-<img width="1440" alt="00" src="https://user-images.githubusercontent.com/90566820/182415006-6a5380fb-7b96-4ce9-a3d7-02eca36a885a.png">
-<img width="1440" alt="01" src="https://user-images.githubusercontent.com/90566820/182415023-a36c084b-db48-42be-9b5f-2643ee3ca61a.png">
-<img width="1440" alt="02" src="https://user-images.githubusercontent.com/90566820/182415031-5e1f4189-6911-41c0-965c-b98dbc5a1fb6.png">
+<img width="1440" alt="00-1" src="https://user-images.githubusercontent.com/90566820/182796103-bde2dd83-740b-40e6-b5e0-16d0708fb4e3.png">
+<img width="1440" alt="00-2" src="https://user-images.githubusercontent.com/90566820/182796120-b88040b8-4221-4ff2-b652-04ad2a44a04a.png">
+<img width="1440" alt="01" src="https://user-images.githubusercontent.com/90566820/182796132-0f9ea098-2121-4fce-a1a8-1826dcf5d78f.png">
+<img width="1440" alt="02" src="https://user-images.githubusercontent.com/90566820/182796143-60dce234-ebf9-4595-930a-4222fdd3b27d.png">
 <img width="1440" alt="03" src="https://user-images.githubusercontent.com/90566820/182415035-60c59632-d54f-4461-a249-0cb652f02aab.png">
-<img width="1440" alt="04" src="https://user-images.githubusercontent.com/90566820/182415042-c00f2089-6cb0-46bd-82b6-0f07ecc86e4a.png">
+<img width="1440" alt="04-1" src="https://user-images.githubusercontent.com/90566820/182796203-0ca1c856-7e48-4c46-be40-1adc5e8e6137.png">
+<img width="1440" alt="04-2" src="https://user-images.githubusercontent.com/90566820/182796212-ca43384d-d24f-476c-b49a-7f2efdb81f29.png">
 <img width="1440" alt="05" src="https://user-images.githubusercontent.com/90566820/182415052-9530376a-4120-4daa-b39d-5f5a150d1205.png">
 <img width="1440" alt="06" src="https://user-images.githubusercontent.com/90566820/182415061-0725c8bf-592d-4062-965e-1accda0fbb7b.png">
 <img width="1440" alt="07" src="https://user-images.githubusercontent.com/90566820/182415070-0ae93d6c-1465-42c7-a505-604a2196f3c1.png">
