@@ -17,3 +17,7 @@
 		</div>
 	</div>
 </div>
+<div class="container my-5 pb-5">
+	<h2 class="text-center text-yellow my-3">- - new ideas! - -</h2>
+  <%= render partial: 'layouts/posts', locals: { posts: Post.all } %>
+</div>
