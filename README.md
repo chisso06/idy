@@ -1,4 +1,6 @@
 # アイデア投稿SNS 「idy」
+## Link
+https://idy-new.herokuapp.com/posts
 ## 目的
 誰しも、ふとした瞬間に突然アイデアがひらめいた経験はあるはず。しかしそれらのほとんどは誰にも共有されずに忘れ去られてしまう。でも、もしそんな瞬間にたとえばTwitterのような手軽さでアイデアを発信できるプラットフォームがあれば、無数の多様なアイデアが溢れる場所をみんなで作ることができてもっとワクワクするような世界を作っていけるのでは？と思ったから。
 投稿のタイトルは20字以内、内容説明は最大400字以内、と短い文章で手軽に投稿できるようにした。
@@ -42,15 +44,14 @@ Ruby on Rails 他
 <img width="1440" alt="06" src="https://user-images.githubusercontent.com/90566820/182415061-0725c8bf-592d-4062-965e-1accda0fbb7b.png">
 <img width="1440" alt="07" src="https://user-images.githubusercontent.com/90566820/182415070-0ae93d6c-1465-42c7-a505-604a2196f3c1.png">
 <img width="1440" alt="08" src="https://user-images.githubusercontent.com/90566820/182415075-cf5bab6d-57b6-4ff5-99e6-fb7734ce691b.png">
-<img width="1440" alt="09" src="https://user-images.githubusercontent.com/90566820/182415083-a44572b0-98ac-4cc7-8f83-29895287137b.png">
-<img width="1440" alt="09" src="https://user-images.githubusercontent.com/90566820/182415088-4a3e9321-51a4-4cae-8b37-a5c81a20da49.png">
+<img width="1440" alt="09" src="https://user-images.githubusercontent.com/90566820/183016911-718cdc18-4116-4591-9094-bb63bb66fd19.png">
 <img width="1440" alt="11" src="https://user-images.githubusercontent.com/90566820/182415097-d6077aa0-d88e-473f-bc2e-8e3c6adff478.png">
 <img width="1440" alt="12" src="https://user-images.githubusercontent.com/90566820/182415104-cd7af30c-9212-4ced-b99d-3a97f8b98b3b.png">
 <img width="1440" alt="13" src="https://user-images.githubusercontent.com/90566820/182415113-d364daea-1440-400f-861d-b3b87991cc1d.png">
 <img width="1440" alt="14" src="https://user-images.githubusercontent.com/90566820/182415121-4c040910-7251-4a4e-a292-d36d1ee74d36.png">
 <img width="1440" alt="15" src="https://user-images.githubusercontent.com/90566820/182415128-9dd2a8ed-d256-4fa7-89b4-88ea2b6b2fbc.png">
 <img width="1440" alt="16" src="https://user-images.githubusercontent.com/90566820/182415134-f1c0b18e-b670-45e1-a8f7-38c750686f92.png">
-<img width="1440" alt="17" src="https://user-images.githubusercontent.com/90566820/182415141-7bf0f647-12b4-4534-9f4f-41c61947fe4e.png">
+<img width="1440" alt="17" src="https://user-images.githubusercontent.com/90566820/183016890-e4011802-1c4f-4365-9465-c4ca187e68c7.png">
 <img width="1440" alt="18" src="https://user-images.githubusercontent.com/90566820/182415146-89bddea0-0979-45d9-83aa-09e7668601bd.png">
 <img width="1440" alt="19" src="https://user-images.githubusercontent.com/90566820/182415150-ecf48e7c-ea8f-47f6-bf44-61ed51379328.png">
 <img width="1127" alt="mail1" src="https://user-images.githubusercontent.com/90566820/182415154-a1a06905-3040-4374-a30a-6dc62473cbd2.png">
