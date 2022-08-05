@@ -13,13 +13,14 @@
 	</h2>
 	<div id="collapse<%= i %>" class="accordion-collapse collapse" aria-labelledby="heading<%= i %>" data-mdb-parent="#myAccordion">
 		<div class="accordion-body">
-			<%= text %>
-			<% if i == 1 %>
+			<% if i == 4 %>
 				<% if @current_user %>
 					<a href="/destroy/<%= @current_user.user_name %>" class="a-yellow">こちら</a> よりお手続きを行なってください。
 				<% else %>
 					<a href="/destroy/0" class="a-yellow">こちら</a> よりお手続きを行ってください。
 				<% end %>
+			<% else %>
+				<pre class="m-0"><%= text %></pre>
 			<% end %>
 		</div>
 	</div>
