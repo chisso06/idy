@@ -6,6 +6,7 @@ ruby "2.7.4"
 gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'
 gem 'bootstrap', '~> 5.0.2'
 gem 'ransack', '~> 3.2', '>= 3.2.1'
+gem 'dotenv', '~> 2.8', '>= 2.8.1'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.2", ">= 7.0.2.2"

@@ -67,10 +67,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'idy-new.herokuapp.com' }
   config.action_mailer.smtp_settings = {
     port: 587,
-    address: ADDRESS,
-    user_name: USER_NAME,
-    password: PASSWORD,
-    domain: DOMAIN,
+    address: ENV['ADDRESS'],
+    user_name: ENV['USER_NAME'],
+    password: ENV['PASSWORD'],
+    domain: ENV['DOMAIN'],
     authentication: :login,
   }
 
