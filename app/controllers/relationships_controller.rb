@@ -3,7 +3,7 @@ class RelationshipsController < ApplicationController
 	before_action :get_user
 
 	def create
-    @current_user.follow(@user)
+		@current_user.follow(@user)
 		redirect_to @user
 	end
 

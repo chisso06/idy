@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :login_user, only: [:create, :update, :destroy, :show, :index]
   before_action :get_post, only: [:update, :destroy, :show]
   before_action :correct_user, only: [:update, :destroy]
-  
+
   # def new
   #   @post = Post.new
   # end
@@ -16,6 +16,7 @@ class PostsController < ApplicationController
 		  redirect_back(fallback_location: post_path(@post))
     else
       @posts = Post.all
+      flash[:dangerous] = CANNOT_SAVE_MESSAGE
       redirect_back(fallback_location: posts_path)
     end
   end
