@@ -19,14 +19,14 @@
         <ul class="nav navbar-nav d-flex align-items-center mb-2 mb-lg-0">
           <% if @current_user.nil? %>
             <li class="nav-item">
-              <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#signup">新規登録</a>
+              <a class="nav-link text-white hover-pointer" data-mdb-toggle="modal" data-mdb-target="#signup">新規登録</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" data-mdb-toggle="modal" data-mdb-target="#login">ログイン</a>
+              <a class="nav-link text-white hover-pointer" data-mdb-toggle="modal" data-mdb-target="#login">ログイン</a>
             </li>
           <% else %>
             <li class="nav-item">
-              <a class="nav-link text-white" href="<%= user_url(@current_user) %>">MyPage</a>
+              <a class="nav-link text-white hover-pointer" href="<%= user_url(@current_user) %>">MyPage</a>
             </li>
             <li class="nav-item">
 				      <a class="nav-link text-white hover-pointer" data-mdb-toggle="modal" data-mdb-target="#new_post"><strong>ひらめいた！</strong></a>

@@ -4,14 +4,14 @@ class ApplicationController < ActionController::Base
 	before_action :set_search
 
 	UNEXPECTED_ERROR_MESSAGE		 = "予期せぬエラーが発生しました"
-  NO_AUTHORITY_MESSAGE				 = "権限がありません"
-  SAVE_MESSAGE								 = "保存しました"
-  CANNOT_SAVE_MESSAGE					 = "保存に失敗しました"
-  NEED_LOGIN_MESSAGE					 = "ログインしてください"
-  DEFECTIVE_CONTENT_MESSAGE		 = "内容に不備があります"
+	NO_AUTHORITY_MESSAGE				 = "権限がありません"
+	SAVE_MESSAGE								 = "保存しました"
+	CANNOT_SAVE_MESSAGE					 = "保存に失敗しました"
+	NEED_LOGIN_MESSAGE					 = "ログインしてください"
+	DEFECTIVE_CONTENT_MESSAGE		 = "内容に不備があります"
 	NOT_REGISTERED_EMAIL_MESSAGE = "このメールアドレスは登録されていません"
 	FAIL_AUTHENTICATE_MESSAGE		 = "認証に失敗しました。"
-  NOT_EXIST_USER_MESSAGE			 = "このユーザーは存在しません"
+	NOT_EXIST_USER_MESSAGE			 = "このユーザーは存在しません"
 	NOT_EXIST_POST_MESSAGE			 = "この投稿は存在しません"
 
 	# application
@@ -19,12 +19,12 @@ class ApplicationController < ActionController::Base
 	SEND_EMAIL_MESSAGE			 = "認証メールを送信しました"
 
 	# users
-  WRONG_LOGIN_MESSAGE			 = "メールアドレスもしくはパスワードが間違っています"
-  WRONG_PASSWORD_MESSAGE	 = "パスワードが間違っています"
-  WELCOME_MESSAGE					 = "idyへようこそ！"
-  REGISTERED_EMAIL_MESSAGE = "このメールアドレスはすでに登録されています"
-  WITHDRAWAL_MESSAGE			 = "アカウントを削除しました"
-  ALREADY_LOGIN_MASSAGE		 = "すでにログインしています"
+	WRONG_LOGIN_MESSAGE			 = "メールアドレスもしくはパスワードが間違っています"
+	WRONG_PASSWORD_MESSAGE	 = "パスワードが間違っています"
+	WELCOME_MESSAGE					 = "idyへようこそ！"
+	REGISTERED_EMAIL_MESSAGE = "このメールアドレスはすでに登録されています"
+	WITHDRAWAL_MESSAGE			 = "アカウントを削除しました"
+	ALREADY_LOGIN_MASSAGE		 = "すでにログインしています"
 
 	# account_activations
 	COMPLETE_EMAIL_AUTHENTICATION_MESSAGE = "メールアドレスの認証が完了しました"
@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
 	DESTROY_POST_MESSAGE		= "投稿を削除しました"
 
 	def current_user
-    if session[:user_id]
+	if session[:user_id]
 			user = User.find_by(session_token: session[:user_id])
 			if user.nil? || user.session_expired?
 				flash[:dangerous] = NEED_LOGIN_AGAIN_MESSAGE
@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
 			@search_posts = @q.result(distinct: true)
 			@search_following_posts = following_posts(@q.result(distinct: true))
 		end
-  end
+	end
 
 	private
 
